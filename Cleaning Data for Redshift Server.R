@@ -310,3 +310,115 @@ View(Clean_Data)
 ## Creating CSV from clean data from 2020: 2022
 write.csv(Clean_Data,"C:/Users/cogps/Desktop/VoterReg_By_County_20_to_22.csv", row.names =FALSE)
 ?write.csv
+
+
+#### Converting a pdf to  csv ####
+## https://stackoverflow.com/questions/21646717/convert-pdf-to-csv-with-r
+## https://github.com/expersso/pdftables
+# https://stackoverflow.com/questions/18078303/scraping-large-pdf-tables-which-span-across-multiple-pages
+
+system(paste('"C:/Program Files/Xpdf/pdftotext.exe"', '"C:/Documents and Settings/rM/Desktop/club.pdf"'), wait=FALSE)
+
+
+convert_pdf('test/index.pdf', output_file = NULL, format = "xlsx-single", message = TRUE, api_key = "insert_API_key")
+
+
+### https://medium.com/@ketanrd.009/how-to-extract-pdf-tables-in-r-e994c0fe4e28
+#install.packages("remotes")
+library(remotes)
+# https://stackoverflow.com/questions/43884603/installing-tabulizer-package-in-r
+
+remotes::install_github(c("ropensci/tabulizerjars", "ropensci/tabulizer"), INSTALL_opts = "--no-multiarch", dependencies = c("Depends", "Imports"))
+# library(plyr)
+# 
+# packs <- c('stringi', 'httpuv', 'digest', 'htmltools', 'sourcetools', 'evaluate', 'markdown', 
+#            'stringr', 'yaml', 'rJava', 'testthat')
+# 
+# laply(packs, function(x){
+#   install.packages(x)  
+#   readline(prompt="Press [enter] to continue")
+# }
+# )
+
+library(tabulizer)
+#library(tabulizerjars)
+library(tidyverse)
+
+# https://support.rstudio.com/hc/en-us/articles/200486138-Changing-R-versions-for-the-RStudio-Desktop-IDE
+
+#install.packages("pdftools")
+library(pdftools)
+pdf<-pdf(file="January2017TotalVotersbyCO.pdf")
+View(pdf)
+gpi_table <- extract_tables(pdf,
+                            output = "data.frame",
+                            guess = FALSE)
+
+## https://datascienceplus.com/extracting-tables-from-pdfs-in-r-using-the-tabulizer-package/
+library(tabulizer)
+library(dplyr)
+
+
+## http://applied-r.com/extract-data-tables-from-pdf-files-in-r/
+# Load Tabula functions
+library(tabulizer)
+library(tabulizerjars)
+# Define path to PDF file
+pdf.file <- "C:/Users/cogps/Downloads/January2017ActiveVotersbyA.pdf"
+
+## locate area
+# install.packages("miniUI")
+library(miniUI)
+f <- locate_areas(pdf.file)
+#f
+# 
+gpi_table <- extract_tables(file=pdf.file,
+                            output = "data.frame",
+                            guess = TRUE)
+View(gpi_table)
+
+gpi_table_clean <- reduce(gpi_table, bind_rows)
+View(gpi_table_clean)
+
+# Extract data table
+pdf.dat <- extract_tables(pdf.file)
+View(pdf.dat)
+# Coerce output matrix to data.frame
+pdf.tbl <- data.frame(pdf.dat[[1]][-1, ])
+names(pdf.tbl) <- pdf.dat[[1]][1, ]
+# Display first 5 rows of data
+head(pdf.tbl)
+View(pdf.tbl)
+
+
+## Different way to convert PDFS to CSV's 
+## https://www.rdocumentation.org/packages/pdftables/versions/0.1/topics/convert_pdf
+library(pdftables)
+pdf.file <- "C:/Users/cogps/Downloads/January2017ActiveVotersbyA.pdf"
+
+library(pdftools)
+pdf<-pdf(file="January2017TotalVotersbyCO.pdf")
+View(pdf)
+
+convert_pdf(pdf.file,output_file = NULL, format = "csv", message = TRUE)
+
+
+## Attempt 3 https://www.youtube.com/watch?v=kw67vMFSjEw
+library(pdftools)
+library(readr)
+library(dplyr)
+library(stringr)
+
+bank1<-pdf_text("C:/Users/cogps/Downloads/January2017ActiveVotersbyA.pdf") %>%
+  read_lines()
+
+bank2<-bank1[2:17]%>%
+  str_squish()%>%
+  strsplit(split=" ")
+
+bank3<-ldply(bank2)
+View(bank2)
+
+
+## Attempt 4
+## https://www.youtube.com/watch?v=DhY3V4LCdps
