@@ -22,7 +22,7 @@ setwd("C:/Users/cogps/Downloads/Total Voters By County")
 data.files = list.files()
 
 library(readxl)
-JanData<-read_excel("Total Voters by County and Party 1.22.xlsx", range = "A7:J24", col_names=TRUE)
+#JanData<-read_excel("Total Voters by County and Party 1.22.xlsx", range = "A7:J24", col_names=TRUE)
 
 # install.packages("gdata")
 ## installing Rtools
@@ -422,3 +422,33 @@ View(bank2)
 
 ## Attempt 4
 ## https://www.youtube.com/watch?v=DhY3V4LCdps
+
+
+## Apparently I am not the only one having issues with teh Tabulizer package
+## https://community.rstudio.com/t/rstudio-crashing-with-tabulizer-need-to-install-the-legacy-java-se-6-runtime/87937/3
+## https://stackoverflow.com/questions/72033264/rstudio-fatal-error-when-loading-tabulizer
+
+
+
+## Forgetting PDF Files for now and Cleaning the CSV's
+
+## https://stackoverflow.com/questions/54013961/r-how-to-read-data-from-multiple-workbooks-having-multiple-worksheets-into-r
+
+library(purrr)
+library(readxl)
+library(dplyr)
+library(tidyr)
+
+data_path <- "C:/Users/cogps/Downloads/Assembly District 2018_2022"
+
+files <- dir(data_path, pattern = "*.xlsx")
+
+
+weights_data <- data.frame(filename = files) %>%
+  mutate(file_contents = map(filename,
+                             ~ read_excel(file.path
+                                          (data_path,  .))))
+
+Un_Nested<-unnest(weights_data)
+View(Un_Nested)
+## the name of the files in that folder are repeating rows in the Un_Nested file 
