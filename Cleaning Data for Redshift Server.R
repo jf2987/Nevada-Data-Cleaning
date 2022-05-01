@@ -472,14 +472,45 @@ View(Clean_Data)
 ## I need to make sure that the files are named in an easily cleanble way
 levels(as.factor(Clean_Data$filename))
 
+
+## https://www.statology.org/replace-values-in-data-frame-r/
 ## Clean
+## https://www.statology.org/subset-data-frame-in-r/
+levels(as.factor(Clean_Data$filename))
+sub_S<-subset(Clean_Data, filename == "Active Voters Voter Registration by ASSEMBLY DISTRICT")
+View(sub_S)
+## this data set is from December 2018
 ## "Active Voters Voter Registration by ASSEMBLY DISTRICT"
+Clean_Data[Clean_Data == "Active Voters Voter Registration by ASSEMBLY DISTRICT"] <- "12.18"
+levels(as.factor(Clean_Data$filename))
+
+## Apparently there is another csv file with 12.18 in it
+## 12.18 Voter Registration by ASSEMBLY DISTRICT
+sub_S<-subset(Clean_Data, filename == "12.18 Voter Registration by ASSEMBLY DISTRICT")
+View(sub_S)
+## this is actually January 2019
+
+Clean_Data[Clean_Data == "12.18 Voter Registration by ASSEMBLY DISTRICT"] <- "1.19"
+levels(as.factor(Clean_Data$filename))
+
+## But apparently tehre is already another file from Jan 19 "1.2019"
+sub_S<-subset(Clean_Data, filename == "1.2019")
+View(sub_S)
+## This files columns are all over the place-- they are like 12 columns to the right
+
+sub_T<-subset(Clean_Data, filename == "1.19")
+View(sub_T)
+
+## They do not have the same data-- I need to go figure out what is happening
+
+
 ## Clean
 ## "Copy of Active Voters Voter Registration by ASSEMBLY DISTRICT"
 ## Clean
 ## "March Active Voters BY ASSEMBLY"
 
 ## I need to subset based on that value in order to know what year and month it came from
+
 
 Clean_Data$filename<-Clean_Data$filename %>% str_replace("Total Voters by COUNTY AND PARTY ", "")
 #Clean_Data$filename<-Clean_Data$filename %>% str_replace("Total Voters BY COUNTY AND PARTY ", "")
