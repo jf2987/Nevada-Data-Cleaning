@@ -452,3 +452,35 @@ weights_data <- data.frame(filename = files) %>%
 Un_Nested<-unnest(weights_data)
 View(Un_Nested)
 ## the name of the files in that folder are repeating rows in the Un_Nested file 
+
+## Replacing Unecessary characters from the File Names
+names(Un_Nested)
+
+levels(as.factor(Un_Nested$filename))
+library(stringr)
+library(tidyverse)
+
+Clean_Data<-Un_Nested
+
+levels(as.factor(Clean_Data$filename))
+Clean_Data$filename<-Clean_Data$filename %>% str_replace(".xlsx", "")
+levels(as.factor(Clean_Data$filename))
+Clean_Data$filename<-Clean_Data$filename %>% str_replace("Active Voters Voter Registration by ASSEMBLY DISTRICT ", "")
+levels(as.factor(Clean_Data$filename))
+View(Clean_Data)
+
+## I need to make sure that the files are named in an easily cleanble way
+levels(as.factor(Clean_Data$filename))
+
+## Clean
+## "Active Voters Voter Registration by ASSEMBLY DISTRICT"
+## Clean
+## "Copy of Active Voters Voter Registration by ASSEMBLY DISTRICT"
+## Clean
+## "March Active Voters BY ASSEMBLY"
+
+## I need to subset based on that value in order to know what year and month it came from
+
+Clean_Data$filename<-Clean_Data$filename %>% str_replace("Total Voters by COUNTY AND PARTY ", "")
+#Clean_Data$filename<-Clean_Data$filename %>% str_replace("Total Voters BY COUNTY AND PARTY ", "")
+levels(as.factor(Clean_Data$filename))
