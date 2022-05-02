@@ -452,6 +452,21 @@ weights_data <- data.frame(filename = files) %>%
 Un_Nested<-unnest(weights_data)
 View(Un_Nested)
 ## the name of the files in that folder are repeating rows in the Un_Nested file 
+dim(Un_Nested)
+# 4126 rows and 33 columns
+
+names(Un_Nested)
+
+
+## Delete rows that which have all columns empty
+## https://www.r-bloggers.com/2021/06/remove-rows-that-contain-all-na-or-certain-columns-in-r/
+## https://stackoverflow.com/questions/51596658/remove-rows-which-have-all-nas-in-certain-columns
+## https://www.r-bloggers.com/2021/06/remove-rows-that-contain-all-na-or-certain-columns-in-r/
+
+Un_Nested<-Un_Nested[!apply(is.na(Un_Nested[,1:33]), 1, all),]
+dim(Un_Nested)
+## None were deleted-- each row has at least some info in it. 
+
 
 ## Replacing Unecessary characters from the File Names
 names(Un_Nested)
@@ -496,12 +511,12 @@ levels(as.factor(Clean_Data$filename))
 ## But apparently tehre is already another file from Jan 19 "1.2019"
 sub_S<-subset(Clean_Data, filename == "1.2019")
 View(sub_S)
+## this one has higher numbers per cell than the previous one. 
+
 ## This files columns are all over the place-- they are like 12 columns to the right
 
 sub_T<-subset(Clean_Data, filename == "1.19")
 View(sub_T)
-
-## They do not have the same data-- I need to go figure out what is happening
 
 
 ## Clean
