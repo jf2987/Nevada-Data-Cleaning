@@ -462,11 +462,9 @@ names(Un_Nested)
 ## https://www.r-bloggers.com/2021/06/remove-rows-that-contain-all-na-or-certain-columns-in-r/
 ## https://stackoverflow.com/questions/51596658/remove-rows-which-have-all-nas-in-certain-columns
 ## https://www.r-bloggers.com/2021/06/remove-rows-that-contain-all-na-or-certain-columns-in-r/
-
+dim(Un_Nested) # 4126 rows 33 columns
 Un_Nested<-Un_Nested[!apply(is.na(Un_Nested[,1:33]), 1, all),]
-dim(Un_Nested)
-## None were deleted-- each row has at least some info in it. 
-
+dim(Un_Nested) # 4126 rows 33 columns
 
 ## Replacing Unecessary characters from the File Names
 names(Un_Nested)
@@ -486,8 +484,10 @@ View(Clean_Data)
 
 ## I need to make sure that the files are named in an easily cleanble way
 levels(as.factor(Clean_Data$filename))
-
-
+ ## get rid of "Active Voters by Assembly District
+levels(as.factor(Clean_Data$filename))
+Clean_Data$filename<-Clean_Data$filename %>% str_replace("Active Voters by Assembly District", "")
+levels(as.factor(Clean_Data$filename))
 ## https://www.statology.org/replace-values-in-data-frame-r/
 ## Clean
 ## https://www.statology.org/subset-data-frame-in-r/
@@ -518,15 +518,69 @@ View(sub_S)
 sub_T<-subset(Clean_Data, filename == "1.19")
 View(sub_T)
 
+## I will figure that out later-- I need to keep cleaning the file name column
+# Active Voters BY ASSEMBLY DISTRICT# this one does not have a date or month-- I need to
+## figure out why that is the case
 
-## Clean
-## "Copy of Active Voters Voter Registration by ASSEMBLY DISTRICT"
-## Clean
-## "March Active Voters BY ASSEMBLY"
+sub_S<-subset(Clean_Data, filename == "Active Voters BY ASSEMBLY DISTRICT")
+View(sub_S)
+## this one is June 2019
+## I will rename it to 6.19
 
-## I need to subset based on that value in order to know what year and month it came from
+Clean_Data[Clean_Data == "Active Voters BY ASSEMBLY DISTRICT"] <- "6.19"
 
-
-Clean_Data$filename<-Clean_Data$filename %>% str_replace("Total Voters by COUNTY AND PARTY ", "")
-#Clean_Data$filename<-Clean_Data$filename %>% str_replace("Total Voters BY COUNTY AND PARTY ", "")
 levels(as.factor(Clean_Data$filename))
+## Clean
+## "Active Voters by ASSEMBLY DISTRICT"
+
+Clean_Data$filename<-Clean_Data$filename %>% str_replace("Active Voters by ASSEMBLY DISTRICT", "")
+
+levels(as.factor(Clean_Data$filename))
+
+## Clean
+## Active Voters BY ASSEMBLY DISTRICT
+Clean_Data$filename<-Clean_Data$filename %>% str_replace("Active Voters BY ASSEMBLY DISTRICT", "")
+
+levels(as.factor(Clean_Data$filename))
+
+## I need to figure out what day and Month this file is 
+# Copy of Active Voters Voter Registration by ASSEMBLY DISTRICT
+
+sub_S<-subset(Clean_Data, filename == "Copy of Active Voters Voter Registration by ASSEMBLY DISTRICT")
+View(sub_S)
+## this one is April 2019
+## I will rename it to 4.19
+levels(as.factor(Clean_Data$filename))
+Clean_Data[Clean_Data == "Copy of Active Voters Voter Registration by ASSEMBLY DISTRICT"] <- "4.19"
+
+levels(as.factor(Clean_Data$filename))
+
+
+## Same for this one
+## March Active Voters BY ASSEMBLY
+
+sub_S<-subset(Clean_Data, filename == "March Active Voters BY ASSEMBLY")
+View(sub_S)
+## this one is March 2019
+## I will rename it to 3.19
+levels(as.factor(Clean_Data$filename))
+Clean_Data[Clean_Data == "March Active Voters BY ASSEMBLY"] <- "3.19"
+
+levels(as.factor(Clean_Data$filename))
+
+## Clean this one
+## Voter Registration by ASSEMBLY DISTRICT Jan.18
+sub_S<-subset(Clean_Data, filename == "Voter Registration by ASSEMBLY DISTRICT Jan.18")
+View(sub_S)
+## this one is actually Feb 2018
+## I will rename it to 2.18_
+## although there is technically already a 2.18 file there
+
+levels(as.factor(Clean_Data$filename))
+Clean_Data[Clean_Data == "Voter Registration by ASSEMBLY DISTRICT Jan.18"] <- "2.18_"
+
+levels(as.factor(Clean_Data$filename))
+
+## Now I need to view the data 
+View(Clean_Data)
+## I need to move the contents of some columsn a couple spaces back
