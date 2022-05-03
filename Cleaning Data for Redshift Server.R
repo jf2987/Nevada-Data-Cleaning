@@ -583,4 +583,19 @@ levels(as.factor(Clean_Data$filename))
 
 ## Now I need to view the data 
 View(Clean_Data)
+
+## Remove rows with empty cells from column 2 to column 33
+dim(Clean_Data) # 4126
+Clean_Data<-Clean_Data[!apply(is.na(Clean_Data[,2:33]), 1, all),]
+dim(Clean_Data) # 3744 left
+
+View(Clean_Data)
+
+## Now if column 3 to column 33 is empty
+
+dim(Clean_Data) # 3744
+Clean_Data<-Clean_Data[!apply(is.na(Clean_Data[,3:33]), 1, all),]
+dim(Clean_Data) # 3466 left
+
+
 ## I need to move the contents of some columsn a couple spaces back
