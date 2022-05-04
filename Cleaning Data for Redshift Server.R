@@ -598,7 +598,12 @@ Clean_Data<-Clean_Data[!apply(is.na(Clean_Data[,3:33]), 1, all),]
 dim(Clean_Data) # 3466 left
 
 View(Clean_Data)
-## I need to move the contents of some columsn a couple spaces back
+## I need to remove the below rows 
+# https://www.statology.org/remove-rows-in-r/
+View(Clean_Data[45:75,])
+Clean_Data<-Clean_Data[-c(45:75),]
+View(Clean_Data[45:75,])
 
+View(Clean_Data)
 ### 10.18 does not have Assembly District numbers in it
 ## its because the format of it is off in the real data
