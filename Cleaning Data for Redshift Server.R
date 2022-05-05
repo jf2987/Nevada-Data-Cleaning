@@ -605,5 +605,25 @@ Clean_Data<-Clean_Data[-c(45:75),]
 View(Clean_Data[45:75,])
 
 View(Clean_Data)
+
+## 177:207
+
+View(Clean_Data[177:207,])
+Clean_Data<-Clean_Data[-c(177:207),]
+View(Clean_Data[177:207,])
+
+levels(as.factor(Clean_Data$filename))
+
+## Name Cleaning
+library(stringr)
+Clean_Data$filename<-Clean_Data$filename %>% str_replace("Active Voters  ASSEMBLY DISTRICT", "")
+levels(as.factor(Clean_Data$filename))
+
+## replacing any space with no space 
+
+Clean_Data$filename<-Clean_Data$filename %>% str_replace(" ", "")
+levels(as.factor(Clean_Data$filename))
+
+
 ### 10.18 does not have Assembly District numbers in it
 ## its because the format of it is off in the real data
