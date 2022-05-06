@@ -499,7 +499,7 @@ dim(Un_Nested)
 ### WORKED
 
 ## Deleting from main data set 
-
+View(Un_Nested)
 
 
 
@@ -507,9 +507,9 @@ dim(Un_Nested)
 ## https://www.r-bloggers.com/2021/06/remove-rows-that-contain-all-na-or-certain-columns-in-r/
 ## https://stackoverflow.com/questions/51596658/remove-rows-which-have-all-nas-in-certain-columns
 ## https://www.r-bloggers.com/2021/06/remove-rows-that-contain-all-na-or-certain-columns-in-r/
-dim(Un_Nested) # 4126 rows 33 columns
+dim(Un_Nested) # 2966 rows 33 columns
 Un_Nested<-Un_Nested[!apply(is.na(Un_Nested[,1:33]), 1, all),]
-dim(Un_Nested) # 4126 rows 33 columns
+dim(Un_Nested) # 2966 rows 33 columns
 
 ## Replacing Unecessary characters from the File Names
 names(Un_Nested)
@@ -539,23 +539,25 @@ levels(as.factor(Clean_Data$filename))
 levels(as.factor(Clean_Data$filename))
 sub_S<-subset(Clean_Data, filename == "Active Voters Voter Registration by ASSEMBLY DISTRICT")
 View(sub_S)
-## this data set is from December 2018
+## this data set is from December 2018 -- it was also hyper linked in the 
+## government web cite to its correct month and year
+
+## replace that value with its year and month
 ## "Active Voters Voter Registration by ASSEMBLY DISTRICT"
 Clean_Data[Clean_Data == "Active Voters Voter Registration by ASSEMBLY DISTRICT"] <- "12.18"
 levels(as.factor(Clean_Data$filename))
 
 ## Apparently there is another csv file with 12.18 in it
 ## 12.18 Voter Registration by ASSEMBLY DISTRICT
-sub_S<-subset(Clean_Data, filename == "12.18 Voter Registration by ASSEMBLY DISTRICT")
-View(sub_S)
+View(subset(Clean_Data, filename == "12.18 Voter Registration by ASSEMBLY DISTRICT"))
 ## this is actually January 2019
 
 Clean_Data[Clean_Data == "12.18 Voter Registration by ASSEMBLY DISTRICT"] <- "1.19"
 levels(as.factor(Clean_Data$filename))
 
 ## But apparently tehre is already another file from Jan 19 "1.2019"
-sub_S<-subset(Clean_Data, filename == "1.2019")
-View(sub_S)
+## this one was derived from the correct year and month in the govt web cite
+View(subset(Clean_Data, filename == "1.2019"))
 ## this one has higher numbers per cell than the previous one. 
 
 ## This files columns are all over the place-- they are like 12 columns to the right
@@ -567,12 +569,11 @@ View(sub_T)
 # Active Voters BY ASSEMBLY DISTRICT# this one does not have a date or month-- I need to
 ## figure out why that is the case
 
-sub_S<-subset(Clean_Data, filename == "Active Voters BY ASSEMBLY DISTRICT")
-View(sub_S)
+View(subset(Clean_Data, filename == "Active Voters BY ASSEMBLY DISTRICT"))
 ## this one is June 2019
 ## I will rename it to 6.19
 
-Clean_Data[Clean_Data == "Active Voters BY ASSEMBLY DISTRICT"] <- "6.19"
+Clean_Data[Clean_Data == "Active Voters BY ASSEMBLY DISTRICT"] <- "6.19_2"
 
 levels(as.factor(Clean_Data$filename))
 ## Clean
@@ -591,8 +592,7 @@ levels(as.factor(Clean_Data$filename))
 ## I need to figure out what day and Month this file is 
 # Copy of Active Voters Voter Registration by ASSEMBLY DISTRICT
 
-sub_S<-subset(Clean_Data, filename == "Copy of Active Voters Voter Registration by ASSEMBLY DISTRICT")
-View(sub_S)
+View(subset(Clean_Data, filename == "Copy of Active Voters Voter Registration by ASSEMBLY DISTRICT"))
 ## this one is April 2019
 ## I will rename it to 4.19
 levels(as.factor(Clean_Data$filename))
@@ -604,8 +604,8 @@ levels(as.factor(Clean_Data$filename))
 ## Same for this one
 ## March Active Voters BY ASSEMBLY
 
-sub_S<-subset(Clean_Data, filename == "March Active Voters BY ASSEMBLY")
-View(sub_S)
+View(subset(Clean_Data, filename == "March Active Voters BY ASSEMBLY"))
+
 ## this one is March 2019
 ## I will rename it to 3.19
 levels(as.factor(Clean_Data$filename))
@@ -615,49 +615,20 @@ levels(as.factor(Clean_Data$filename))
 
 ## Clean this one
 ## Voter Registration by ASSEMBLY DISTRICT Jan.18
-sub_S<-subset(Clean_Data, filename == "Voter Registration by ASSEMBLY DISTRICT Jan.18")
-View(sub_S)
+View(subset(Clean_Data, filename == "Voter Registration by ASSEMBLY DISTRICT Jan.18"))
 ## this one is actually Feb 2018
+
+
 ## I will rename it to 2.18_
 ## although there is technically already a 2.18 file there
 
 levels(as.factor(Clean_Data$filename))
-Clean_Data[Clean_Data == "Voter Registration by ASSEMBLY DISTRICT Jan.18"] <- "2.18_"
+Clean_Data[Clean_Data == "Voter Registration by ASSEMBLY DISTRICT Jan.18"] <- "2.18_2"
 
 levels(as.factor(Clean_Data$filename))
 
 ## Now I need to view the data 
 View(Clean_Data)
-
-## Remove rows with empty cells from column 2 to column 33
-dim(Clean_Data) # 4126
-Clean_Data<-Clean_Data[!apply(is.na(Clean_Data[,2:33]), 1, all),]
-dim(Clean_Data) # 3744 left
-
-View(Clean_Data)
-
-## Now if column 3 to column 33 is empty
-
-dim(Clean_Data) # 3744
-Clean_Data<-Clean_Data[!apply(is.na(Clean_Data[,3:33]), 1, all),]
-dim(Clean_Data) # 3466 left
-
-View(Clean_Data)
-## I need to remove the below rows 
-# https://www.statology.org/remove-rows-in-r/
-View(Clean_Data[45:75,])
-Clean_Data<-Clean_Data[-c(45:75),]
-View(Clean_Data[45:75,])
-
-View(Clean_Data)
-
-## 177:207
-
-View(Clean_Data[177:207,])
-Clean_Data<-Clean_Data[-c(177:207),]
-View(Clean_Data[177:207,])
-
-levels(as.factor(Clean_Data$filename))
 
 ## Name Cleaning
 library(stringr)
@@ -670,37 +641,28 @@ Clean_Data$filename<-Clean_Data$filename %>% str_replace(" ", "")
 levels(as.factor(Clean_Data$filename))
 
 
-## Delete 221 to 252
 
-View(Clean_Data[221:251,])
-Clean_Data<-Clean_Data[-c(221:251),]
-View(Clean_Data[221:251,])
 
-## 
+## Remove rows with empty cells from column 2 to column 33
+dim(Clean_Data) # 2966
+Clean_Data<-Clean_Data[!apply(is.na(Clean_Data[,2:33]), 1, all),]
+dim(Clean_Data) # 2576 left
+
+View(Clean_Data)
+
+## Now if column 3 to column 33 is empty
+
+dim(Clean_Data) # 2576
+Clean_Data<-Clean_Data[!apply(is.na(Clean_Data[,3:33]), 1, all),]
+dim(Clean_Data) # 2292 left
+
 View(Clean_Data)
 
 
-## 265:295
-
-View(Clean_Data[265:295,])
-Clean_Data<-Clean_Data[-c(265:295),]
-View(Clean_Data[265:295,])
-
-# 309:339
-
-View(Clean_Data[309:339,])
-Clean_Data<-Clean_Data[-c(309:339),]
-View(Clean_Data[309:339,])
-
-
-# 
-View(Clean_Data)
-
-
-## 353:383
-View(Clean_Data[353:383,])
-Clean_Data<-Clean_Data[-c(353:383),]
-View(Clean_Data[353:383,])
-
+## I need to remove the below rows 
+# https://www.statology.org/remove-rows-in-r/
+# View(Clean_Data[45:75,])
+# Clean_Data<-Clean_Data[-c(45:75),]
+# View(Clean_Data[45:75,])
 
 ## i need to find and exploit a pattern 
