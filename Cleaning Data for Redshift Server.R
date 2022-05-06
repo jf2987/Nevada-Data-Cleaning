@@ -625,5 +625,37 @@ Clean_Data$filename<-Clean_Data$filename %>% str_replace(" ", "")
 levels(as.factor(Clean_Data$filename))
 
 
-### 10.18 does not have Assembly District numbers in it
-## its because the format of it is off in the real data
+## Delete 221 to 252
+
+View(Clean_Data[221:251,])
+Clean_Data<-Clean_Data[-c(221:251),]
+View(Clean_Data[221:251,])
+
+## 
+View(Clean_Data)
+
+
+## 265:295
+
+View(Clean_Data[265:295,])
+Clean_Data<-Clean_Data[-c(265:295),]
+View(Clean_Data[265:295,])
+
+# 309:339
+
+View(Clean_Data[309:339,])
+Clean_Data<-Clean_Data[-c(309:339),]
+View(Clean_Data[309:339,])
+
+
+# 
+View(Clean_Data)
+
+
+## 353:383
+View(Clean_Data[353:383,])
+Clean_Data<-Clean_Data[-c(353:383),]
+View(Clean_Data[353:383,])
+
+
+## i need to find and exploit a pattern 
