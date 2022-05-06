@@ -434,6 +434,9 @@ View(bank2)
 
 ## https://stackoverflow.com/questions/54013961/r-how-to-read-data-from-multiple-workbooks-having-multiple-worksheets-into-r
 
+
+#### Cleaning AD XLSX Files in Bilk ####
+
 library(purrr)
 library(readxl)
 library(dplyr)
@@ -456,6 +459,32 @@ dim(Un_Nested)
 # 4126 rows and 33 columns
 
 names(Un_Nested)
+
+## I need to figure out a way to delete colummns that have county names
+## in "...2"
+levels(as.factor(Un_Nested$"...2"))
+
+# "Carson City" "Churchill"   "Clark"       "Douglas"    
+# "Elko"        "Esmeralda"   "Eureka"      "Humboldt"    "Lander"     
+# "Lincoln"     "Lyon"        "Mineral"     "Nye"         "Pershing"   
+# "Storey"      "Total"       "Washoe"      "White Pine"
+# https://stackoverflow.com/questions/15294573/deleting-a-row-in-r-based-on-value-in-column
+#https://stackoverflow.com/questions/46652012/subsetting-data-by-multiple-values-in-multiple-variables-in-r
+?subset
+
+View(Un_Nested[Un_Nested$"...2" %in% c("Carson City", "Churchill", "Clark","Douglas",
+  "Elko","Esmeralda","Eureka","Humboldt","Lander","Lincoln","Lyon","Mineral","Nye",         
+"Pershing","Storey","Total","Washoe","White Pine"), ])
+
+excluded<-Un_Nested[Un_Nested$"...2" %in% c("Carson City", "Churchill", "Clark","Douglas",
+                                            "Elko","Esmeralda","Eureka","Humboldt","Lander","Lincoln","Lyon","Mineral","Nye",         
+                                            "Pershing","Storey","Total","Washoe","White Pine"), ]
+dim(excluded)
+## deleting 1251 rows 
+
+## Deleting from main data set 
+
+
 
 
 ## Delete rows that which have all columns empty
