@@ -482,6 +482,22 @@ excluded<-Un_Nested[Un_Nested$"...2" %in% c("Carson City", "Churchill", "Clark",
 dim(excluded)
 ## deleting 1251 rows 
 
+dim(Un_Nested)
+## 4217
+
+4217-1251
+## I should be left with 2966
+# https://www.tutorialspoint.com/how-to-subset-rows-that-do-not-contain-na-and-blank-in-one-of-the-columns-in-an-r-data-frame
+
+
+Un_Nested<-Un_Nested[!(Un_Nested$"...2" %in% c("Carson City", "Churchill", "Clark","Douglas",
+                                            "Elko","Esmeralda","Eureka","Humboldt","Lander","Lincoln","Lyon","Mineral","Nye",         
+                                            "Pershing","Storey","Total","Washoe","White Pine")), ]
+
+dim(Un_Nested)
+## 2966
+### WORKED
+
 ## Deleting from main data set 
 
 
