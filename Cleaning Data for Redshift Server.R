@@ -665,4 +665,22 @@ View(Clean_Data)
 # Clean_Data<-Clean_Data[-c(45:75),]
 # View(Clean_Data[45:75,])
 
-## i need to find and exploit a pattern 
+## what is the NA percentage per column 
+## https://stackoverflow.com/questions/33512837/calculate-using-dplyr-percentage-of-nas-in-each-column
+## well, now i know the map function is in the purrr library
+library(purrr)
+Clean_Data %>% map(~ mean(is.na(.)))
+
+## most of the columns to the right are NA-- they have like 96 percent missingness
+## now i need to choose a column of choice from the lot
+## then I see if there are any patterns in the values that are within 
+## the mostly empty columns 
+# https://stackoverflow.com/questions/7980622/subset-of-rows-containing-na-missing-values-in-a-chosen-column-of-a-data-frame
+names(Clean_Data)
+dim(dplyr::filter(Clean_Data,is.na(Democrat)))
+
+## I need to do the same but for values that which is NOT NA
+## https://www.statology.org/r-is-not-na/
+View(Clean_Data[!(is.na(Clean_Data$Democrat)), ])
+dim(Clean_Data[!(is.na(Clean_Data$Democrat)), ])
+## there are 86 rows that which are messing this up then
