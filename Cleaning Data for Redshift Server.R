@@ -677,10 +677,54 @@ Clean_Data %>% map(~ mean(is.na(.)))
 ## the mostly empty columns 
 # https://stackoverflow.com/questions/7980622/subset-of-rows-containing-na-missing-values-in-a-chosen-column-of-a-data-frame
 names(Clean_Data)
+dim(Clean_Data)
+## 2292
 dim(dplyr::filter(Clean_Data,is.na(Democrat)))
+## 2206
 
 ## I need to do the same but for values that which is NOT NA
 ## https://www.statology.org/r-is-not-na/
 View(Clean_Data[!(is.na(Clean_Data$Democrat)), ])
 dim(Clean_Data[!(is.na(Clean_Data$Democrat)), ])
 ## there are 86 rows that which are messing this up then
+
+## I might need to separate the data based on the previous conditions, clean them 
+## and then add rows 
+Clean<-dplyr::filter(Clean_Data,is.na(Democrat))
+Dirty<-Clean_Data[!(is.na(Clean_Data$Democrat)), ]
+
+
+View (Clean)
+dim(Clean)
+
+## Delete empty columns 
+## https://www.codingprof.com/3-easy-ways-to-remove-empty-columns-in-r/
+library(tidyverse)
+dim(Clean)
+## 33 columns
+library(purrr)
+Clean<-Clean %>% discard(~all(is.na(.) | . ==""))
+dim(Clean)
+## 22 columns 
+View(Clean)
+## 10.18 has a pattern
+
+#5:53pm 6:01pm
+
+## if ..2 is empty then move the contents from columm3:5 one space to the left
+## test run
+Copy<-Clean
+names(Copy)
+## https://datacornering.com/ifelse-and-na-problem-in-r/
+# https://stackoverflow.com/questions/34071875/replace-a-value-na-with-the-value-from-another-column-in-r
+Copy$"...2" <- ifelse(is.na(Copy$"...2"), Copy$"...3", Copy$"...2")
+View(Copy)
+## if ..2 --- ..3 then NA, else ..3
+Copy$"...3" <- ifelse(Copy$"...2"==Copy$"...3",NA, Copy$"...3")
+View(Copy)
+
+## if ...3 is NA then ...5, else.. ..3
+
+
+## 10.18 is serving as the prime example of where i need to move the contents 
+## of the columns 
