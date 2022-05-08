@@ -808,3 +808,19 @@ View(Copy)
 ## that are messed up
 ## I also need to remember to clean the dirty subset and to join it with the "Clean"
 ## more like add it to the clean
+
+
+## # 2.2019 is in an odd format4.19 too 3.19 too  
+## subset based on condition to view patterns
+View(subset(Copy, filename == "2.2019"))
+## if 2.2019 and ...9 is NA, then ...10 else ...9
+##
+Test<-Copy
+Test$"...9" <- ifelse(is.na(Test$"...9")& Test$"filename"=="2.2019", Test$"...10", Test$"...9")
+View(Copy)
+View(subset(Test, filename == "2.2019"))
+
+## if 2.2019 and 9 is equal to 10 then NA else 10
+Test$"...10" <- ifelse(Test$"filename"=="2.2019" & Test$"...10"==Test$"...9",NA, Test$"...10")
+View(Test)
+View(subset(Test, filename == "2.2019"))
