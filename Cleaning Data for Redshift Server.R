@@ -724,6 +724,40 @@ Copy$"...3" <- ifelse(Copy$"...2"==Copy$"...3",NA, Copy$"...3")
 View(Copy)
 
 ## if ...3 is NA then ...5, else.. ..3
+Copy$"...3" <- ifelse(is.na(Copy$"...3"), Copy$"...5", Copy$"...3")
+View(Copy)
+## Now if ...3 and 
+Copy$"...5" <- ifelse(Copy$"...3"==Copy$"...5",NA, Copy$"...5")
+View(Copy)
+
+## if .4 is empty then make it ...7 else keep it ...4
+Copy$"...4" <- ifelse(is.na(Copy$"...4"), Copy$"...7", Copy$"...4")
+View(Copy)
+
+## if ...4 and ...7 are equal, then delete ...7 else ...7
+Copy$"...7" <- ifelse(Copy$"...4"==Copy$"...7",NA, Copy$"...7")
+View(Copy)
+
+### if ...5 is empty then ..9 else ...5
+Copy$"...5" <- ifelse(is.na(Copy$"...5"), Copy$"...9", Copy$"...5")
+View(Copy)
+
+## if .5 and .9 are the same, then delete .9 else keep .9
+
+Copy$"...9" <- ifelse(Copy$"...5"==Copy$"...9",NA, Copy$"...9")
+View(Copy)
+
+## if ...6 is NA then ...11 else ...6
+
+Copy$"...6" <- ifelse(is.na(Copy$"...6"), Copy$"...11", Copy$"...6")
+View(Copy)
+
+## if ...11 is the same as ...6 then NA, else ....11
+
+Copy$"...11" <- ifelse(Copy$"...6"==Copy$"...11",NA, Copy$"...11")
+View(Copy)
+
+## if ...7 is NA then ...14 else ...7
 
 
 ## 10.18 is serving as the prime example of where i need to move the contents 
