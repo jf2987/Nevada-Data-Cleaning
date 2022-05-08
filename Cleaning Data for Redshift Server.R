@@ -789,5 +789,22 @@ View(Copy)
 Copy$"...21" <- ifelse(Copy$"...10"==Copy$"...21",NA, Copy$"...21")
 View(Copy)
 
-## 10.18 is serving as the prime example of where i need to move the contents 
-## of the columns 
+
+## Delete all empty columns
+## https://www.codingprof.com/3-easy-ways-to-remove-empty-columns-in-r/
+library(tidyverse)
+dim(Copy)
+## 22 columns
+library(purrr)
+Copy<-Copy %>% discard(~all(is.na(.) | . ==""))
+dim(Copy)
+## 18 columns 
+View(Copy)
+
+
+# 2.2019 is in an odd format4.19 too 3.19 too 
+
+## I need to look at the columsn wherein ...11 is not NA-- these are the ones
+## that are messed up
+## I also need to remember to clean the dirty subset and to join it with the "Clean"
+## more like add it to the clean
