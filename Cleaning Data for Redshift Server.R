@@ -905,3 +905,94 @@ View(Dirty)
 dim(Dirty)
 ## 86 rows 33 columns
 ## Delete empty Columns
+## https://www.codingprof.com/3-easy-ways-to-remove-empty-columns-in-r/
+library(tidyverse)
+dim(Dirty)
+## 33 columns
+library(purrr)
+Dirty<-Dirty %>% discard(~all(is.na(.) | . ==""))
+dim(Dirty)
+## 11 columns 
+View(Dirty)
+
+# delete column 11
+library(dplyr)
+names(Dirty)
+Dirty<-Dirty %>% select(-(11))
+names(Dirty)
+names(Clean_Data)
+
+## Rename the first two columns as 
+#"Month_Year" and "Assembly_District" respectively 
+names(Dirty)
+names(Dirty)[names(Dirty)=="filename"] <- "Month_Year"
+names(Dirty)
+
+names(Dirty)
+names(Dirty)[names(Dirty)=="County Name\r\n"] <- "Assembly_District"
+names(Dirty)
+
+
+## add rows from Dirty and Clean_Data together for a final product
+library(dplyr)
+names(Clean_Data)
+## 2205 rows
+names(Dirty)
+## 86
+Final<-bind_rows(Clean_Data,Dirty) 
+## Error in `bind_rows()`:
+# ! Can't combine `..1$Democrat` <character> and `..2$Democrat` <double>.
+# Run `rlang::last_error()` to see where the error occurred
+
+## It's struggling to combine them because there are 
+## strings still present in the Clean_Data file
+## the columns need to be the same type if they will be 
+## added as rows
+
+# Delete rows based on condition from Clean_Data
+View(Clean_Data)
+# if Assembly District is "Total" or "County Name" delete row
+## https://www.datasciencemadesimple.com/delete-or-drop-rows-in-r-with-conditions-2/
+dim(Clean_Data)
+## currently 2205 riws 
+Clean_Data_1<-Clean_Data
+dim(Clean_Data_1)
+## 2205
+levels(as.factor(Clean_Data_1$Assembly_District))
+Clean_Data_1<-Clean_Data_1[!(Clean_Data_1$Assembly_District=="Total" | Clean_Data_1$Assembly_District=="County Name\n"|Clean_Data_1$Assembly_District=="County Name\r\n"),]
+dim(Clean_Data_1)
+## 2024
+View(Clean_Data_1)
+## They are still being read as characters-- but let me see if I can joing them now
+library(dplyr)
+dim(Clean_Data_1)
+## 2024 rows
+dim(Dirty)
+## 86
+Final<-bind_rows(Clean_Data_1,Dirty) 
+## it doesn't work-- things need to be the same type
+## https://statisticsglobe.com/convert-data-frame-column-to-numeric-in-r
+sapply(Clean_Data_1, class)  
+sapply(Dirty, class)
+## making range of columsn numeric in R 3:10
+names(Clean_Data_1)
+i<-c(3:10)
+Clean_Data_2<-Clean_Data_1
+Clean_Data_2[ , i] <- apply(Clean_Data_2[ , i], 2,            # Specify own function within apply
+                    function(x) as.numeric(as.character(x)))
+sapply(Clean_Data_2, class)
+## it worked
+
+library(dplyr)
+dim(Clean_Data_2)
+## 2024 rows
+dim(Dirty)
+## 86
+Final<-bind_rows(Clean_Data_2,Dirty) 
+dim(Final)
+##2110
+2024+86
+# 2110
+View(Final)
+
+## Now i Need to figure out what to do with the dates that have doubles 
