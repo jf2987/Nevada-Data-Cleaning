@@ -758,7 +758,36 @@ Copy$"...11" <- ifelse(Copy$"...6"==Copy$"...11",NA, Copy$"...11")
 View(Copy)
 
 ## if ...7 is NA then ...14 else ...7
+Copy$"...7" <- ifelse(is.na(Copy$"...7"), Copy$"...14", Copy$"...7")
+View(Copy)
 
+## if 14 and 7 match then delete 14 else keep 14
+
+Copy$"...14" <- ifelse(Copy$"...7"==Copy$"...14",NA, Copy$"...14")
+View(Copy)
+
+## if 8 is NA then 16 else 8
+Copy$"...8" <- ifelse(is.na(Copy$"...8"), Copy$"...16", Copy$"...8")
+View(Copy)
+## if 8 and 16 are the same then delete 16 else 16
+Copy$"...16" <- ifelse(Copy$"...8"==Copy$"...16",NA, Copy$"...16")
+View(Copy)
+
+
+## if 9 is NA then 18 else 9
+Copy$"...9" <- ifelse(is.na(Copy$"...9"), Copy$"...18", Copy$"...9")
+View(Copy)
+## if 9 and 18 are the same then delete 18 else 18
+Copy$"...18" <- ifelse(Copy$"...9"==Copy$"...18",NA, Copy$"...18")
+View(Copy)
+
+## if 10 is NA then 21 else 10
+Copy$"...10" <- ifelse(is.na(Copy$"...10"), Copy$"...21", Copy$"...10")
+View(Copy)
+
+## if 10 and 21 are the same then delete 21 else 21
+Copy$"...21" <- ifelse(Copy$"...10"==Copy$"...21",NA, Copy$"...21")
+View(Copy)
 
 ## 10.18 is serving as the prime example of where i need to move the contents 
 ## of the columns 
