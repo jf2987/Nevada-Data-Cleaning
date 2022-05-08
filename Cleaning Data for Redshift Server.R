@@ -824,3 +824,38 @@ View(subset(Test, filename == "2.2019"))
 Test$"...10" <- ifelse(Test$"filename"=="2.2019" & Test$"...10"==Test$"...9",NA, Test$"...10")
 View(Test)
 View(subset(Test, filename == "2.2019"))
+
+## so if file name is 2.2019 and 10 is NA, then 11, else 10
+Test$"...10" <- ifelse(is.na(Test$"...10")& Test$"filename"=="2.2019", Test$"...11", Test$"...10")
+View(subset(Test, filename == "2.2019"))
+## if 10 and 11 are the same and file name is 2.2019, then NA else 11. 
+Test$"...11" <- ifelse(Test$"filename"=="2.2019" & Test$"...10"==Test$"...11",NA, Test$"...11")
+View(Test)
+View(subset(Test, filename == "2.2019"))
+
+## okay, now I need to look at the hiccups related to the other year and month
+## 4.19 too 3.19 too
+View(subset(Test, filename == "4.19"))
+
+## if the file name is 4.19 and 9 is NA then 10 else 9-- this one literally has 
+## the same patter as 2/2019-- i could have added an or statement with the 
+## stuff I coded above and saved myself lines of code
+View(subset(Test, filename == "3.19"))
+## the same pattern occurs for 3.19 as well--
+## so, i am going to try to clean them both at the same time
+View(subset(Test, filename == "3.19"|filename == "4.19"))
+
+## if the file name is 4.19 or 3.19 and 9 is NA then 10 else 9-- this one literally has 
+Test$"...9" <- ifelse(is.na(Test$"...9")& Test$"filename"=="3.19"|Test$filename == "4.19", Test$"...10", Test$"...9")
+View(subset(Test, filename == "3.19"|filename == "4.19"))
+### if file name is 3.19 or 4.19 and 10 is equal to 9 then delete 10, else 10
+Test$"...10" <- ifelse(Test$"filename"=="3.19"|Test$filename == "4.19" & Test$"...10"==Test$"...9",NA, Test$"...10")
+View(subset(Test, filename == "3.19"|filename == "4.19"))
+
+## if filename is 3.19 or 4.19 and  10 is NA then 11 else 11
+Test$"...10" <- ifelse(is.na(Test$"...10")& Test$"filename"=="3.19"|Test$filename == "4.19", Test$"...11", Test$"...10")
+View(subset(Test, filename == "3.19"|filename == "4.19"))
+
+## if file name is 3.19 or 4.19 and 10 and 11 are the same delte 11 else 11
+Test$"...11" <- ifelse(Test$"filename"=="3.19"|Test$filename == "4.19" & Test$"...10"==Test$"...11",NA, Test$"...11")
+View(subset(Test, filename == "3.19"|filename == "4.19"))
