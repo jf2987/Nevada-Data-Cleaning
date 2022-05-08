@@ -859,3 +859,49 @@ View(subset(Test, filename == "3.19"|filename == "4.19"))
 ## if file name is 3.19 or 4.19 and 10 and 11 are the same delte 11 else 11
 Test$"...11" <- ifelse(Test$"filename"=="3.19"|Test$filename == "4.19" & Test$"...10"==Test$"...11",NA, Test$"...11")
 View(subset(Test, filename == "3.19"|filename == "4.19"))
+
+
+## 
+View(Test)
+## I haven't even clean the dirty subset
+
+## Delete ...11 onwards 12:18
+#https://www.statology.org/remove-columns-in-r/
+names(Test)
+library(dplyr)
+
+Test<-Test %>% select(-(12:18))
+dim(Test)
+## 11 columns
+names(Test)
+## Make the first Row the Column Names
+# https://stackoverflow.com/questions/20956119/assign-headers-based-on-existing-row-in-dataframe-in-r
+
+library(janitor)
+Clean_Data<-janitor::row_to_names(Test,1)
+View(Clean_Data)
+
+## Rename first two columsn 
+## https://www.statology.org/how-to-rename-data-frame-columns-in-r/
+names(Clean_Data)
+names(Clean_Data)[names(Clean_Data)=="08.2018"] <- "Month_Year"
+names(Clean_Data)
+
+names(Clean_Data)
+names(Clean_Data)[names(Clean_Data)=="County Name\r\n"] <- "Assembly_District"
+names(Clean_Data)
+
+## delete Total Column 11
+library(dplyr)
+
+Clean_Data<-Clean_Data %>% select(-(11))
+dim(Clean_Data)
+
+names(Clean_Data)
+
+
+## Now, focus on Cleaning Dirty data
+View(Dirty)
+dim(Dirty)
+## 86 rows 33 columns
+## Delete empty Columns
