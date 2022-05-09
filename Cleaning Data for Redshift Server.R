@@ -1104,8 +1104,17 @@ View(Final)
 ## ## Clean Month COlumn
 ## https://www.rdocumentation.org/packages/lubridate/versions/1.8.0/topics/month
 
-# library(lubridate)
-# levels(as.factor(Clean_Data$Month))
-# Clean_Data$Month<-month(as.numeric(Clean_Data$Month), label=TRUE, abbr = FALSE)
-# View(Clean_Data)
-## Should I make the Month Column into the name?
+library(lubridate)
+levels(as.factor(Final$Month))
+Final$Month<-month(as.numeric(Final$Month), label=TRUE, abbr = FALSE)
+View(Final)
+
+## Delete Assembly District extra wordings 
+library(stringr)
+library(tidyverse)
+names(Final)
+
+levels(as.factor(Final$Assembly_District))
+Final_1<-Final
+Final$Assembly_District<-Final$Assembly_District %>% str_replace("Assembly Dist. ", "")
+View(Final)
