@@ -1065,7 +1065,47 @@ levels(as.factor(Final$Month_Year))
 ## i will replace 2.2019 with 2.19
 Final[Final == "2.2019"] <- "2.19"
 levels(as.factor(Final$Month_Year))
-
+## they still have the "Total" value in the Assembly_District Column
+## I need to delete it 
 
 ## nOw explore how many rows are within each level
 ## this will help me identify double ups
+table(Final$Month_Year)
+## all have 42 except 4.19 which for some reason has 43
+View(subset(Final, Month_Year == "1.19"))
+levels(as.factor(Final$Assembly_District))
+#"Total"
+dim(Final)
+# 1984
+Final<-Final[!(Final$Assembly_District=="Total"),]
+dim(Final)
+## 1982
+table(Final$Month_Year)
+## they all have 42 per month and year
+
+## 
+View(Final)
+
+## Split the Month and Year Column into separate columns
+# https://www.delftstack.com/howto/r/separate-in-r/
+library(tidyr)
+library(dplyr)
+library(stringr)
+Final_C<-Final
+names(Final_C)
+Final<-Final %>% separate(Month_Year, c('Month', 'Year'))
+View(Final)
+
+## now I need to add 2000 to the year 
+
+Final$Year<-2000 + as.numeric(Final$Year)
+View(Final)
+
+## ## Clean Month COlumn
+## https://www.rdocumentation.org/packages/lubridate/versions/1.8.0/topics/month
+
+# library(lubridate)
+# levels(as.factor(Clean_Data$Month))
+# Clean_Data$Month<-month(as.numeric(Clean_Data$Month), label=TRUE, abbr = FALSE)
+# View(Clean_Data)
+## Should I make the Month Column into the name?
