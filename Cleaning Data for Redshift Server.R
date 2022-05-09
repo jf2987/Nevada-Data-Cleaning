@@ -996,3 +996,29 @@ dim(Final)
 View(Final)
 
 ## Now i Need to figure out what to do with the dates that have doubles 
+levels(as.factor(Final$Month_Year))
+
+# "6.19" "6.19_2"
+## https://www.statology.org/subset-data-frame-in-r/
+levels(as.factor(Final$Month_Year))
+View(subset(Final, Month_Year == "6.19"))
+View(subset(Final, Month_Year == "6.19_2"))
+## the one with _2 has lower values so -- it should be delete
+levels(as.factor(Final$Month_Year))
+dim(Final)
+##2110
+dim(subset(Final, Month_Year == "6.19_2"))
+## 42
+2110-42
+## we should get 2068
+
+Final<-Final[!(Final$Month_Year=="6.19_2"),]
+dim(Test)
+## we do 
+## 2068
+
+levels(as.factor(Final$Month_Year))
+
+
+## now we got to clean 
+## "2.18"    "2.18_2"
