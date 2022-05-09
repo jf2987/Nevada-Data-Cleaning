@@ -1051,3 +1051,21 @@ dim(Final)
 Final<-Final[!(Final$Month_Year=="1.19"),]
 dim(Final)
 ## we are 
+levels(as.factor(Final$Month_Year))
+
+
+## replacing 08.2018 with 8.18
+## weitf, I just noticed that there is no column name for the above line of code
+
+Final[Final == "08.2018"] <- "8.18"
+levels(as.factor(Final$Month_Year))
+## i will replace 1.2019 with 1.19
+Final[Final == "1.2019"] <- "1.19"
+levels(as.factor(Final$Month_Year))
+## i will replace 2.2019 with 2.19
+Final[Final == "2.2019"] <- "2.19"
+levels(as.factor(Final$Month_Year))
+
+
+## nOw explore how many rows are within each level
+## this will help me identify double ups
