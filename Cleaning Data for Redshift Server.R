@@ -1013,7 +1013,7 @@ dim(subset(Final, Month_Year == "6.19_2"))
 ## we should get 2068
 
 Final<-Final[!(Final$Month_Year=="6.19_2"),]
-dim(Test)
+dim(Final)
 ## we do 
 ## 2068
 
@@ -1022,3 +1022,32 @@ levels(as.factor(Final$Month_Year))
 
 ## now we got to clean 
 ## "2.18"    "2.18_2"
+View(subset(Final, Month_Year == "2.18"))
+View(subset(Final, Month_Year == "2.18_2"))
+## the one with the _2 has less-- so it will be deleted
+dim(subset(Final, Month_Year == "2.18_2"))
+##42 
+dim(Final)
+## 2068
+2068-42
+## we should end up with 2026
+Final<-Final[!(Final$Month_Year=="2.18_2"),]
+dim(Final)
+## we do 
+
+levels(as.factor(Final$Month_Year))
+
+## "1.19" "1.2019"
+View(subset(Final, Month_Year == "1.19"))
+View(subset(Final, Month_Year == "1.2019"))
+
+## 1.19 has less so it will be deleted
+dim(subset(Final, Month_Year == "1.19"))
+## 42
+dim(Final)
+# 2026
+2026-42
+## we should be left with 1984
+Final<-Final[!(Final$Month_Year=="1.19"),]
+dim(Final)
+## we are 
