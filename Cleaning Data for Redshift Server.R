@@ -1118,3 +1118,27 @@ levels(as.factor(Final$Assembly_District))
 Final_1<-Final
 Final$Assembly_District<-Final$Assembly_District %>% str_replace("Assembly Dist. ", "")
 View(Final)
+
+
+## Visualize the data via a time analysis
+write.csv(Final, "C:/Users/cogps/Desktop/AD_2018_22.csv", row.names=FALSE)
+
+
+## https://boostedml.com/2020/05/visualizing-time-series-in-r.html
+
+View(Final)
+
+Final<-read.csv("C:/Users/cogps/Desktop/AD_2018_22.csv")
+
+## Start visualizations of Voter registration after the 2020 time period 
+
+library(ggfortify)
+library(zoo)
+library(tseries)
+library(astsa)
+library(forecast)
+library(ggplot2)
+
+
+## https://www.statology.org/rename-file-in-r/
+## figure out how to rename files based on their hyperlink
