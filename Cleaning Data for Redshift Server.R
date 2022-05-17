@@ -442,10 +442,13 @@ library(readxl)
 library(dplyr)
 library(tidyr)
 
-data_path <- "C:/Users/cogps/Downloads/Assembly District 2018_2022"
+# data_path <- "C:/Users/cogps/Downloads/Assembly District 2018_2022"
+data_path <- "C:/Users/cogps/Downloads/ReDo"
+
 
 files <- dir(data_path, pattern = "*.xlsx")
-
+View(files)
+## i need to make sure it also picks up CSV's
 
 weights_data <- data.frame(filename = files) %>%
   mutate(file_contents = map(filename,
@@ -454,9 +457,13 @@ weights_data <- data.frame(filename = files) %>%
 
 Un_Nested<-unnest(weights_data)
 View(Un_Nested)
+levels(as.factor(Un_Nested$filename))
 ## the name of the files in that folder are repeating rows in the Un_Nested file 
+## it did not pick up the CSV
 dim(Un_Nested)
 # 4126 rows and 33 columns
+### Now with the new folder-- unlinke the old folder--
+## we have 4403 rows
 
 names(Un_Nested)
 
@@ -481,12 +488,14 @@ excluded<-Un_Nested[Un_Nested$"...2" %in% c("Carson City", "Churchill", "Clark",
                                             "Pershing","Storey","Total","Washoe","White Pine"), ]
 dim(excluded)
 ## deleting 1251 rows 
-
+## second round 1281
 dim(Un_Nested)
 ## 4217
-
+## second round 4403
 4217-1251
+4403-1281
 ## I should be left with 2966
+## second round, i should be left with 3122
 # https://www.tutorialspoint.com/how-to-subset-rows-that-do-not-contain-na-and-blank-in-one-of-the-columns-in-an-r-data-frame
 
 
@@ -497,6 +506,8 @@ Un_Nested<-Un_Nested[!(Un_Nested$"...2" %in% c("Carson City", "Churchill", "Clar
 dim(Un_Nested)
 ## 2966
 ### WORKED
+## 3122
+## Worked
 
 ## Deleting from main data set 
 View(Un_Nested)
