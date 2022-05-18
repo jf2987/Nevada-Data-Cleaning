@@ -1094,24 +1094,93 @@ names(Clean_Data)
 # County Name\r\n
 #"8.18"
 # NA
-Clean_Data<-Clean_Data[!(Clean_Data$`Voter Registration Figures`=="County Name\r\n"| Clean_Data$`Voter Registration Figures`=="Total"| Clean_Data$`Voter Registration Figures`=="County Name\n"),]
-dim(Clean_Data)
-## 2108
+View (Clean_Data)
+## Rename 8.18 Column into Month_Year
+names(Clean_Data)
+names(Clean_Data)[names(Clean_Data)=="08.18"] <- "Month_Year"
+names(Clean_Data)
 
-levels(as.factor(Clean_Data$`Voter Registration Figures`))
+## View if NA Column is not empty
+names(Clean_Data)
+View(Clean_Data[!(is.na(Clean_Data$`NA`)), ])
+## it seems the last two columns are expendable
+#### I will therefore delete columns 11:12 ####
+library(dplyr)
+names(Clean_Data)
+Clean_Data_C<-Clean_Data
+Clean_Data<-Clean_Data %>% select(-(11:12))
+names(Clean_Data)
 
 ## Delete empty columns
 library(tidyverse)
 dim(Clean_Data)
-## 12 columns
+## 10 columns
 library(purrr)
 Clean_Data<-Clean_Data %>% discard(~all(is.na(.) | . ==""))
 dim(Clean_Data)
-## 11 columns 
+# 10 2207
 View(Clean_Data)
 
+# Delete rows if Count Name 
+names(Clean_Data)
+levels(as.factor(Clean_Data$`County Name\r\n`))
+## delete these "County Name\n"     "County Name\r\n"  "Total"
+dim(Clean_Data[(Clean_Data$`County Name\r\n`=="County Name\r\n"|Clean_Data$`County Name\r\n`=="County Name\n"| Clean_Data$`County Name\r\n`=="Total"),])
+## 107 will be excluded 
+dim(Clean_Data[!(Clean_Data$`County Name\r\n`=="County Name\r\n"|Clean_Data$`County Name\r\n`=="County Name\n"| Clean_Data$`County Name\r\n`=="Total"),])
+## 2108 will be kept
+
+dim(Clean_Data)
+## together there is a total of 2207 before clean up
+
+2207-107
+# the final should have 2100? weird--
+Clean_Data_C<-Clean_Data
+Clean_Data<-Clean_Data[!(Clean_Data$`County Name\r\n`=="County Name\r\n"|Clean_Data$`County Name\r\n`=="County Name\n"| Clean_Data$`County Name\r\n`=="Total"),]
+dim(Clean_Data)
+## 2108
+
+levels(as.factor(Clean_Data$`County Name\r\n`))
+## I mean, it worked-- now i have no more levels that 
+## are named as the before conditions
+## But i am unsure where the extra person came from-- could it be an NA?
+
+View(Clean_Data)
 
 ## don't forget to add rows from Dirty, SubSet and Clean Data
+View(Dirty)
+View(SubSet)
+
+## Name the columns as the first row of Subset
+library(janitor)
+SubSet_C<-SubSet
+SubSet<-janitor::row_to_names(SubSet,1)
+View(SubSet)
+
+#### Delete Total Column for both SubSet and Dirty ####
+names(SubSet)
+# Column 9 for Subset
+
+## COlumn 11 for Dirty
+
+## its starting to worry me that they do not have the same number 
+## of columns
+dim(Clean_Data)
+# 10 
+
+names(Dirty)
+library(dplyr)
+names(Clean_Data)
+Clean_Data_C<-Clean_Data
+Clean_Data<-Clean_Data %>% select(-(11:12))
+names(Clean_Data)
+
+
+library(dplyr)
+names(Clean_Data)
+Clean_Data_C<-Clean_Data
+Clean_Data<-Clean_Data %>% select(-(11:12))
+names(Clean_Data)
 
 ## count of rows not in dirty
 ## 2342
