@@ -968,6 +968,158 @@ View(subset(Test, filename == "3.19"|filename == "4.19"|Test$filename == "2.19")
 
 #### Cleaning 10.18 ####
 
+View(Test[(Test$filename=="10.18"), ])
+dim(Test[(Test$filename=="10.18"), ])
+## there are 48 rows and 26 columns
+
+View(Test[(Test$filename!="10.18"), ])
+dim(Test[(Test$filename!="10.18"), ])
+### 2294 rows and 26 columns
+
+2294+48
+# 2342
+dim(Test)
+# 2342
+
+## Create subsets-- to clean 10.18 alone 
+
+SubSet<-Test[(Test$filename=="10.18"), ]
+Clean_Data<-Test[(Test$filename!="10.18"), ]
+
+## Delete empty columns from the 10.18 subset
+
+library(tidyverse)
+dim(SubSet)
+## 26 columns
+library(purrr)
+SubSet<-SubSet %>% discard(~all(is.na(.) | . ==""))
+dim(SubSet)
+## 19 columns 
+View(SubSet)
+
+#### Delete first two rows of SubSet ####
+# # https://www.datasciencemadesimple.com/delete-or-drop-rows-in-r-with-conditions-2/
+library(dplyr)
+SubSet <- SubSet %>% slice(-c(1:2))
+View(SubSet)
+
+## Delete empty columns again
+dim(SubSet)
+## 19 columns
+library(purrr)
+SubSet<-SubSet %>% discard(~all(is.na(.) | . ==""))
+dim(SubSet)
+## 9 COlumns
+View(SubSet)
+
+## if X is NA, make it "District
+names(SubSet)
+SubSet$X <- ifelse(is.na(SubSet$X),"District", SubSet$X)
+View(SubSet)
+
+## Delete first row
+library(dplyr)
+SubSet <- SubSet %>% slice(-c(1))
+View(SubSet)
+
+## Clean Clean_Data
+View(Clean_Data)
+
+## Delete empty Columns
+library(tidyverse)
+dim(Clean_Data)
+## 26 columns
+library(purrr)
+Clean_Data<-Clean_Data %>% discard(~all(is.na(.) | . ==""))
+dim(Clean_Data)
+## 17 columns 
+View(Clean_Data)
+
+## View if 13 is not NA
+
+View(Clean_Data[!(is.na(Clean_Data$'...13')), ])
+dim(Clean_Data[!(is.na(Clean_Data$'...13')), ])
+## there is 86 rows
+
+## if 13 is NA
+View(Clean_Data[(is.na(Clean_Data$'...13')), ])
+dim(Clean_Data[(is.na(Clean_Data$'...13')), ])
+## 2208 rows
+
+2208+86
+## 2294
+dim(Clean_Data)
+## 2294
+
+## subset to where 13 is NA
+Clean_Data_C<-Clean_Data
+Clean_Data<-Clean_Data[(is.na(Clean_Data$'...13')), ]
+
+dim(Clean_Data)
+## 2208
+
+## Delete empty columns of Clean_Data Subset
+library(tidyverse)
+dim(Clean_Data)
+## 17 columns
+library(purrr)
+Clean_Data<-Clean_Data %>% discard(~all(is.na(.) | . ==""))
+dim(Clean_Data)
+## 12 columns 
+View(Clean_Data)
+
+## Delete row if Voter registration figures is "Total" or "County Name"
+levels(as.factor(Clean_Data$`Voter Registration Figures`))
+
+#"County Name\n", "County Name\r\n", Total"
+
+## https://www.datasciencemadesimple.com/delete-or-drop-rows-in-r-with-conditions-2/
+names(Clean_Data)
+dim(Clean_Data[(Clean_Data$`Voter Registration Figures`=="County Name\r\n"| Clean_Data$`Voter Registration Figures`=="Total"| Clean_Data$`Voter Registration Figures`=="County Name\n"),])
+## 108 rows
+dim(Clean_Data)
+## 2208
+dim(Clean_Data[!(Clean_Data$`Voter Registration Figures`=="County Name\r\n"| Clean_Data$`Voter Registration Figures`=="Total"| Clean_Data$`Voter Registration Figures`=="County Name\n"),])
+# 2108
+
+## subset out the ones that do not satisfy the condition 
+Clean_Data<-Clean_Data_C
+View(Clean_Data)
+#### Name columns as first row ####
+library(janitor)
+Clean_Data<-janitor::row_to_names(Clean_Data,1)
+View(Clean_Data)
+
+names(Clean_Data)
+# County Name\r\n
+#"8.18"
+# NA
+Clean_Data<-Clean_Data[!(Clean_Data$`Voter Registration Figures`=="County Name\r\n"| Clean_Data$`Voter Registration Figures`=="Total"| Clean_Data$`Voter Registration Figures`=="County Name\n"),]
+dim(Clean_Data)
+## 2108
+
+levels(as.factor(Clean_Data$`Voter Registration Figures`))
+
+## Delete empty columns
+library(tidyverse)
+dim(Clean_Data)
+## 12 columns
+library(purrr)
+Clean_Data<-Clean_Data %>% discard(~all(is.na(.) | . ==""))
+dim(Clean_Data)
+## 11 columns 
+View(Clean_Data)
+
+
+## don't forget to add rows from Dirty, SubSet and Clean Data
+
+## count of rows not in dirty
+## 2342
+dim(dplyr::filter(Clean_Data,is.na(Democrat)))
+
+
+
+
 ## 
 View(Test)
 ## I haven't even clean the dirty subset
