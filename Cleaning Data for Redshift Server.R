@@ -828,7 +828,6 @@ dim(Clean)
 View(Clean)
 ## 10.18 has a pattern
 
-#5:53pm 6:01pm
 
 ## if ..2 is empty then move the contents from columm3:5 one space to the left
 ## test run
@@ -913,48 +912,32 @@ View(Copy)
 ## https://www.codingprof.com/3-easy-ways-to-remove-empty-columns-in-r/
 library(tidyverse)
 dim(Copy)
-## 22 columns
+## 30 columns
 library(purrr)
 Copy<-Copy %>% discard(~all(is.na(.) | . ==""))
 dim(Copy)
-## 18 columns 
+## 26 columns 
 View(Copy)
+View(Dirty)
 
 
-# 2.2019 is in an odd format4.19 too 3.19 too 
+## View if ...11 is not NA
+
+# 10.18 weird format of its own, 2.19, 4.19, and 3.19 have a 
+## comparable format
+
+
 
 ## I need to look at the columsn wherein ...11 is not NA-- these are the ones
 ## that are messed up
+View(Copy[!(is.na(Copy$'...11')), ])
+## same pattern for 2, 3, and 4 nineteen
+
+View(subset(Copy, filename == "10.18"))
+## 10.18 might need to be cleaned on its own
+
 ## I also need to remember to clean the dirty subset and to join it with the "Clean"
 ## more like add it to the clean
-
-
-## # 2.2019 is in an odd format4.19 too 3.19 too  
-## subset based on condition to view patterns
-View(subset(Copy, filename == "2.2019"))
-## if 2.2019 and ...9 is NA, then ...10 else ...9
-##
-Test<-Copy
-Test$"...9" <- ifelse(is.na(Test$"...9")& Test$"filename"=="2.2019", Test$"...10", Test$"...9")
-View(Copy)
-View(subset(Test, filename == "2.2019"))
-
-## if 2.2019 and 9 is equal to 10 then NA else 10
-Test$"...10" <- ifelse(Test$"filename"=="2.2019" & Test$"...10"==Test$"...9",NA, Test$"...10")
-View(Test)
-View(subset(Test, filename == "2.2019"))
-
-## so if file name is 2.2019 and 10 is NA, then 11, else 10
-Test$"...10" <- ifelse(is.na(Test$"...10")& Test$"filename"=="2.2019", Test$"...11", Test$"...10")
-View(subset(Test, filename == "2.2019"))
-## if 10 and 11 are the same and file name is 2.2019, then NA else 11. 
-Test$"...11" <- ifelse(Test$"filename"=="2.2019" & Test$"...10"==Test$"...11",NA, Test$"...11")
-View(Test)
-View(subset(Test, filename == "2.2019"))
-
-## okay, now I need to look at the hiccups related to the other year and month
-## 4.19 too 3.19 too
-View(subset(Test, filename == "4.19"))
 
 ## if the file name is 4.19 and 9 is NA then 10 else 9-- this one literally has 
 ## the same patter as 2/2019-- i could have added an or statement with the 
@@ -964,21 +947,26 @@ View(subset(Test, filename == "3.19"))
 ## so, i am going to try to clean them both at the same time
 View(subset(Test, filename == "3.19"|filename == "4.19"))
 
+Test<-Copy
 ## if the file name is 4.19 or 3.19 and 9 is NA then 10 else 9-- this one literally has 
-Test$"...9" <- ifelse(is.na(Test$"...9")& Test$"filename"=="3.19"|Test$filename == "4.19", Test$"...10", Test$"...9")
+Test$"...9" <- ifelse(is.na(Test$"...9")& Test$"filename"=="3.19"|Test$filename == "4.19"|Test$filename == "2.19", Test$"...10", Test$"...9")
 View(subset(Test, filename == "3.19"|filename == "4.19"))
 ### if file name is 3.19 or 4.19 and 10 is equal to 9 then delete 10, else 10
-Test$"...10" <- ifelse(Test$"filename"=="3.19"|Test$filename == "4.19" & Test$"...10"==Test$"...9",NA, Test$"...10")
+Test$"...10" <- ifelse(Test$"filename"=="3.19"|Test$filename == "4.19"|Test$filename == "2.19" & Test$"...10"==Test$"...9",NA, Test$"...10")
 View(subset(Test, filename == "3.19"|filename == "4.19"))
 
 ## if filename is 3.19 or 4.19 and  10 is NA then 11 else 11
-Test$"...10" <- ifelse(is.na(Test$"...10")& Test$"filename"=="3.19"|Test$filename == "4.19", Test$"...11", Test$"...10")
+Test$"...10" <- ifelse(is.na(Test$"...10")& Test$"filename"=="3.19"|Test$filename == "4.19"|Test$filename == "2.19", Test$"...11", Test$"...10")
 View(subset(Test, filename == "3.19"|filename == "4.19"))
 
 ## if file name is 3.19 or 4.19 and 10 and 11 are the same delte 11 else 11
-Test$"...11" <- ifelse(Test$"filename"=="3.19"|Test$filename == "4.19" & Test$"...10"==Test$"...11",NA, Test$"...11")
-View(subset(Test, filename == "3.19"|filename == "4.19"))
+Test$"...11" <- ifelse(Test$"filename"=="3.19"|Test$filename == "4.19"|Test$filename == "2.19" & Test$"...10"==Test$"...11",NA, Test$"...11")
+View(subset(Test, filename == "3.19"|filename == "4.19"|Test$filename == "2.19"))
 
+## Now I need to take care of 10.18
+## I might need to subset it out
+
+#### Cleaning 10.18 ####
 
 ## 
 View(Test)
