@@ -519,8 +519,12 @@ View(Un_Nested)
 ## https://stackoverflow.com/questions/51596658/remove-rows-which-have-all-nas-in-certain-columns
 ## https://www.r-bloggers.com/2021/06/remove-rows-that-contain-all-na-or-certain-columns-in-r/
 dim(Un_Nested) # 2966 rows 33 columns
-Un_Nested<-Un_Nested[!apply(is.na(Un_Nested[,1:33]), 1, all),]
+## 3122, 41 columns
+#Un_Nested<-Un_Nested[!apply(is.na(Un_Nested[,1:33]), 1, all),]
+Un_Nested<-Un_Nested[!apply(is.na(Un_Nested[,2:41]), 1, all),]
 dim(Un_Nested) # 2966 rows 33 columns
+## 2720 after deletion of empty rows from the second column onwards
+## this is from the 3122 that were left before this argument
 
 ## Replacing Unecessary characters from the File Names
 names(Un_Nested)
@@ -552,39 +556,40 @@ sub_S<-subset(Clean_Data, filename == "Active Voters Voter Registration by ASSEM
 View(sub_S)
 ## this data set is from December 2018 -- it was also hyper linked in the 
 ## government web cite to its correct month and year
+## But in my excel file-- this is actually November 2018
 
 ## replace that value with its year and month
 ## "Active Voters Voter Registration by ASSEMBLY DISTRICT"
-Clean_Data[Clean_Data == "Active Voters Voter Registration by ASSEMBLY DISTRICT"] <- "12.18"
+levels(as.factor(Clean_Data$filename))
+Clean_Data[Clean_Data == "Active Voters Voter Registration by ASSEMBLY DISTRICT"] <- "11.18"
 levels(as.factor(Clean_Data$filename))
 
 ## Apparently there is another csv file with 12.18 in it
 ## 12.18 Voter Registration by ASSEMBLY DISTRICT
 View(subset(Clean_Data, filename == "12.18 Voter Registration by ASSEMBLY DISTRICT"))
-## this is actually January 2019
+## this is actually January 2019 ## but in the file I put together
+## this is actually the corrupted excel file
+## and it is in fact 12.18-- despite the future date within
+## the xcel file
 
-Clean_Data[Clean_Data == "12.18 Voter Registration by ASSEMBLY DISTRICT"] <- "1.19"
+Clean_Data[Clean_Data == "12.18 Voter Registration by ASSEMBLY DISTRICT"] <- "12.18"
 levels(as.factor(Clean_Data$filename))
 
 ## But apparently tehre is already another file from Jan 19 "1.2019"
 ## this one was derived from the correct year and month in the govt web cite
 View(subset(Clean_Data, filename == "1.2019"))
-## this one has higher numbers per cell than the previous one. 
 
-## This files columns are all over the place-- they are like 12 columns to the right
 
-sub_T<-subset(Clean_Data, filename == "1.19")
-View(sub_T)
+## I need to rename this one 1.19
 
-## I will figure that out later-- I need to keep cleaning the file name column
-# Active Voters BY ASSEMBLY DISTRICT# this one does not have a date or month-- I need to
-## figure out why that is the case
+Clean_Data[Clean_Data == "1.2019"] <- "1.19"
+
 
 View(subset(Clean_Data, filename == "Active Voters BY ASSEMBLY DISTRICT"))
-## this one is June 2019
-## I will rename it to 6.19
-
-Clean_Data[Clean_Data == "Active Voters BY ASSEMBLY DISTRICT"] <- "6.19_2"
+## this one is June 2019 in the file
+## but May 19 in the govt. webcite
+levels(as.factor(Clean_Data$filename))
+Clean_Data[Clean_Data == "Active Voters BY ASSEMBLY DISTRICT"] <- "5.19"
 
 levels(as.factor(Clean_Data$filename))
 ## Clean
@@ -602,6 +607,7 @@ levels(as.factor(Clean_Data$filename))
 
 ## I need to figure out what day and Month this file is 
 # Copy of Active Voters Voter Registration by ASSEMBLY DISTRICT
+## this one is April 19th -- 4.19
 
 View(subset(Clean_Data, filename == "Copy of Active Voters Voter Registration by ASSEMBLY DISTRICT"))
 ## this one is April 2019
@@ -614,6 +620,7 @@ levels(as.factor(Clean_Data$filename))
 
 ## Same for this one
 ## March Active Voters BY ASSEMBLY
+## in the govt web cite this is March 19th
 
 View(subset(Clean_Data, filename == "March Active Voters BY ASSEMBLY"))
 
@@ -626,15 +633,17 @@ levels(as.factor(Clean_Data$filename))
 
 ## Clean this one
 ## Voter Registration by ASSEMBLY DISTRICT Jan.18
+## this one is 1.18 in the  govt webcite despite it 
+## being feb 18 in the file
+## so i will go for the govt. web cite def. 
 View(subset(Clean_Data, filename == "Voter Registration by ASSEMBLY DISTRICT Jan.18"))
-## this one is actually Feb 2018
 
 
-## I will rename it to 2.18_
-## although there is technically already a 2.18 file there
+
+## I will rename it to 1.18
 
 levels(as.factor(Clean_Data$filename))
-Clean_Data[Clean_Data == "Voter Registration by ASSEMBLY DISTRICT Jan.18"] <- "2.18_2"
+Clean_Data[Clean_Data == "Voter Registration by ASSEMBLY DISTRICT Jan.18"] <- "1.18"
 
 levels(as.factor(Clean_Data$filename))
 
@@ -646,27 +655,92 @@ library(stringr)
 Clean_Data$filename<-Clean_Data$filename %>% str_replace("Active Voters  ASSEMBLY DISTRICT", "")
 levels(as.factor(Clean_Data$filename))
 
+## renaming this one 
+## 12.18 Voter Registration by ASSEMBLY DISTRICT (1)
+## this one is 12.18
+Clean_Data[Clean_Data == "12.18 Voter Registration by ASSEMBLY DISTRICT (1)"] <- "12.18"
+levels(as.factor(Clean_Data$filename))
 ## replacing any space with no space 
 
+## 1.22 (1)
+## this one is 2.22
+Clean_Data[Clean_Data == " 1.22 (1)"] <- "2.22"
+levels(as.factor(Clean_Data$filename))
+
+
+# 2.2019 
+## this one is 2.19
+Clean_Data[Clean_Data == "2.2019 "] <- "2.19"
+levels(as.factor(Clean_Data$filename))
+
+# 08.2018 
+## this one is 08.18
+Clean_Data[Clean_Data == "08.2018 "] <- "8.18"
+levels(as.factor(Clean_Data$filename))
+
+
+## 1018CloseActiveVotersBYNEV_CSV
+## this one is 10.18
+Clean_Data[Clean_Data == "1018CloseActiveVotersBYNEV_CSV"] <- "10.18"
+levels(as.factor(Clean_Data$filename))
+
+## replace empty spaces
 Clean_Data$filename<-Clean_Data$filename %>% str_replace(" ", "")
 levels(as.factor(Clean_Data$filename))
 
 
-
-
 ## Remove rows with empty cells from column 2 to column 33
 dim(Clean_Data) # 2966
-Clean_Data<-Clean_Data[!apply(is.na(Clean_Data[,2:33]), 1, all),]
+## 2720
+
+## there is still missing data
+# [1] "1.18"  "1.19"  "1.20"  "1.21"  "1.22"  "10.18" "10.19"
+# [8] "10.20" "10.21" "11.18" "11.19" "11.20" "11.21" "12.18"
+# [15] "12.19" "12.20" "12.21" "2.18"  "2.19"  "2.20"  "2.21" 
+# [22] "2.22"  "3.18"  "3.19"  "3.20"  "3.21"  "3.22"  "4.18" 
+# [29] "4.19"  "4.20"  "4.21"  "4.22"  "5.18"  "5.19"  "5.20" 
+# [36] "5.21"  "6.18"  "6.19"  "6.20"  "6.21"  "7.18"  "7.19" 
+# [43] "7.20"  "7.21"  "8.18"  "8.19"  "8.20"  "8.21"  "9.19" 
+# [50] "9.20"  "9.21"
+## i am missing 9.18
+## in the downloaded file this one is named
+## 10.18 Active Voters by ASSEMBLY DISTRICT
+## so it is likely this one was collapsed in the 10.18 month
+
+## if that is the case, there should be twice as many rows in that
+## subset
+View(subset(Clean_Data, filename == "10.18"))
+## there are twice as many rows 
+## so, this one needs to be cleaned immediately-- before i start deleting
+## 10.18 Active Voters by ASSEMBLY DISTRICT
+## strong patterns
+
+## I mean, I could also just clean it here-- for there is a clear
+## pattern too
+
+#Test<-Clean_Data
+#### if filename 10.18 and 3 is not NA, then filename is 9.18 else 10.18 ####
+Clean_Data$filename <- ifelse(!is.na(Clean_Data$"...3")& Clean_Data$filename=="10.18", "9.18", Clean_Data$filename)
+View(subset(Clean_Data, filename == "10.18"))
+View(subset(Clean_Data, filename == "9.18"))
+
+## the format for 10.18 data is a bit odd-- so I will have to 
+## clean that one later
+
+dim(Clean_Data)
+Clean_Data<-Clean_Data[!apply(is.na(Clean_Data[,2:41]), 1, all),]
 dim(Clean_Data) # 2576 left
+# 2720 remaining
 
 View(Clean_Data)
 
 ## Now if column 3 to column 33 is empty
 
 dim(Clean_Data) # 2576
-Clean_Data<-Clean_Data[!apply(is.na(Clean_Data[,3:33]), 1, all),]
+## 2720
+Clean_Data<-Clean_Data[!apply(is.na(Clean_Data[,3:41]), 1, all),]
 dim(Clean_Data) # 2292 left
-
+# 2428
 View(Clean_Data)
 
 
@@ -698,25 +772,59 @@ dim(dplyr::filter(Clean_Data,is.na(Democrat)))
 View(Clean_Data[!(is.na(Clean_Data$Democrat)), ])
 dim(Clean_Data[!(is.na(Clean_Data$Democrat)), ])
 ## there are 86 rows that which are messing this up then
+## they are the ones with filen name is equal to 1.19 and 7.18
 
-## I might need to separate the data based on the previous conditions, clean them 
+#### I might need to separate the data based on the previous conditions, clean them ####
 ## and then add rows 
+
+# Clean_Data$filename <- ifelse(!is.na(Clean_Data$"...3")& Clean_Data$filename=="10.18", "9.18", Clean_Data$filename)
+
+## I need to take them out, clean them, and then put them back in 
+
+## count of rows in dirty subset 
+dim(Clean_Data[!(is.na(Clean_Data$Democrat)), ])
+## 86
+dim(Clean_Data[(is.na(Clean_Data$Democrat)), ])
+## count of rows not in dirty
+## 2342
+dim(dplyr::filter(Clean_Data,is.na(Democrat)))
+## 2342
+
 Clean<-dplyr::filter(Clean_Data,is.na(Democrat))
-Dirty<-Clean_Data[!(is.na(Clean_Data$Democrat)), ]
-
-
-View (Clean)
 dim(Clean)
+# 2342
+Dirty<-Clean_Data[!(is.na(Clean_Data$Democrat)), ]
+dim(Dirty)
+# 86
+
+#### Delete empty columns for Dirty###
+names(Dirty)
+
+library(tidyverse)
+dim(Dirty)
+## 41 columns
+library(purrr)
+Dirty<-Dirty %>% discard(~all(is.na(.) | . ==""))
+dim(Dirty)
+## 11 columns left 
+
+View(Dirty)
+
+names(Clean)
+names(Dirty)
+
+## I will add the rows of Dirty once I have cleaned the Clean 
+## subset 
 
 ## Delete empty columns 
 ## https://www.codingprof.com/3-easy-ways-to-remove-empty-columns-in-r/
 library(tidyverse)
 dim(Clean)
-## 33 columns
+## 41 columns
 library(purrr)
 Clean<-Clean %>% discard(~all(is.na(.) | . ==""))
 dim(Clean)
-## 22 columns 
+## 30 columns 
 View(Clean)
 ## 10.18 has a pattern
 
