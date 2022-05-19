@@ -1257,7 +1257,56 @@ names(Clean_Data)[names(Clean_Data)=="County Name\r\n"] <- "District"
 names(Clean_Data)
 
 #### Now I need to make sure the Columns are in the same order ####
+names(SubSet)
+## https://www.tutorialspoint.com/how-to-change-the-order-of-columns-in-an-r-data-frame
+## Before that, I need to rename Nonpartisan into "Non-Partisan
+SubSet_C<-SubSet
+names(SubSet)[names(SubSet)=="Nonpartisan"] <- "Non-Partisan"
+names(Clean_Data)
+names(SubSet)
+SubSet_C<-SubSet
+SubSet<-SubSet[, c("Month_Year", "District", "Democrat", "Green", "Independent" 
+                   ,"Libertarian", "Natural Law", "Non-Partisan", "Other"
+                   ,"Republican")]
 
+names(SubSet)
+names(Clean_Data)
+names(Dirty)
+## renaming Green Party into Green
+names(Dirty)[names(Dirty)=="Green Party"] <- "Green"
+names(Clean_Data)
+names(Dirty)
+
+
+## Perfect 
+## Now I need to make sure the columns are the same type 
+## on the three objects I want to join
+summary(Dirty)
+## first 2 are character-- the rest are numeric
+summary(Clean_Data)
+names(Clean_Data)
+#### All are character-- I need to make 3:10 numeric####
+## https://statisticsglobe.com/convert-data-frame-column-to-numeric-in-r
+## making range of columsn numeric in R 3:10
+names(Clean_Data)
+i<-c(3:10)
+Clean_Data_C<-Clean_Data
+Clean_Data[ , i] <- apply(Clean_Data[ , i], 2,            # Specify own function within apply
+                            function(x) as.numeric(as.character(x)))
+sapply(Clean_Data, class)
+## it worked
+## checking the type for the SubSet
+sapply(SubSet, class)
+names(SubSet)
+## I also need to change 3:10 of the SubSet into numeric
+SubSet_C<-SubSet
+SubSet[ , i] <- apply(SubSet[ , i], 2,            # Specify own function within apply
+                          function(x) as.numeric(as.character(x)))
+
+sapply(SubSet, class)
+## it worked 
+
+#### Now I need to add rows of the 3 objects ####
 
 ## count of rows not in dirty
 ## 2342
