@@ -1170,17 +1170,94 @@ dim(Clean_Data)
 
 names(Dirty)
 library(dplyr)
-names(Clean_Data)
-Clean_Data_C<-Clean_Data
-Clean_Data<-Clean_Data %>% select(-(11:12))
-names(Clean_Data)
+Dirty_C<-Dirty
+Dirty<-Dirty %>% select(-(11))
+names(Dirty)
 
-
+## Delete Total Column for SubSet
 library(dplyr)
+names(SubSet)
+SubSet_C<-SubSet
+SubSet<-SubSet %>% select(-(9))
+names(SubSet)
+#3 for t
+
+## Figure out where the column discrepancy is occuring
+names(SubSet)
+dim(SubSet)
+## 8 columns
+## Add the columns of Green Party, and Natural Law Party
+## just leave them empty cuz there is no info on them 
+## https://www.statology.org/add-empty-column-to-data-frame-r/
+SubSet_C<-SubSet
+SubSet[ , 'Green Party'] <- NA
+SubSet[ , 'Natural Law Party'] <- NA
+names(SubSet)
+dim(SubSet)
+## 44 rows and 10 columns
+
+names(Dirty)
+dim(Dirty)
+## 86 rows and 10 columns
+
 names(Clean_Data)
-Clean_Data_C<-Clean_Data
-Clean_Data<-Clean_Data %>% select(-(11:12))
+dim(Clean_Data)
+## 2108 rows and 10 columns 
+names(SubSet)
+## rename 10.18, American should be Independent
+# https://www.statology.org/how-to-rename-data-frame-columns-in-r/
+names(SubSet)[names(SubSet)=="10.18"] <- "Month_Year"
+names(SubSet)
+names(SubSet)[names(SubSet)=="American"] <- "Independent"
+names(SubSet)
+
+names(SubSet)[names(SubSet)=="Green Party"] <- "Green"
+
+names(SubSet)[names(SubSet)=="Natural Law Party"] <- "Natural Law"
+
+## Now renaming the Dirty Columns
+names(Dirty)
+## renaming File Name into Month_Year and 
+## County Name\r\n into "District"
+names(Dirty)[names(Dirty)=="filename"] <- "Month_Year"
+names(Dirty)
+
+names(Dirty)[names(Dirty)=="County Name\r\n"] <- "District"
+
+names(Dirty)
+
+names(Dirty)[names(Dirty)=="Other (All Others)"] <- "Other"
+names(Dirty)
+
+names(Dirty)[names(Dirty)=="Independent American Party"] <- "Independent"
+
+names(Dirty)[names(Dirty)=="Natural Law Party"] <- "Natural Law"
+
+names(Dirty)[names(Dirty)=="Libertarian Party"] <- "Libertarian"
+
+names(Dirty)
+
+## Names for Clean Data
+
 names(Clean_Data)
+names(Clean_Data)[names(Clean_Data)=="8.18"] <- "Month_Year"
+
+names(Clean_Data)[names(Clean_Data)=="Other (All Others)"] <- "Other"
+
+names(Clean_Data)[names(Clean_Data)=="Libertarian Party"] <- "Libertarian"
+
+names(Clean_Data)[names(Clean_Data)=="Green Party"] <- "Green"
+
+names(Clean_Data)[names(Clean_Data)=="Independent American Party"] <- "Independent"
+
+names(Clean_Data)[names(Clean_Data)=="Natural Law Party"] <- "Natural Law"
+
+names(Clean_Data)[names(Clean_Data)=="County Name\r\n"] <- "District"
+
+names(Clean_Data)
+
+#### Now I need to make sure the Columns are in the same order ####
+
 
 ## count of rows not in dirty
 ## 2342
