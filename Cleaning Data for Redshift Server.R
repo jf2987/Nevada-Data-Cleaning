@@ -1328,6 +1328,109 @@ names(Final)
 names(Final)[names(Final)=="District"] <- "Assembly_District"
 names(Final)
 
+
+#### I totally forgot to clean the Month_Year Column ####
+## Split the Month and Year Column into separate columns
+# https://www.delftstack.com/howto/r/separate-in-r/
+library(tidyr)
+library(dplyr)
+library(stringr)
+Final_C<-Final
+names(Final)
+Final<-Final %>% separate(Month_Year, c('Month', 'Year'))
+names(Final)
+View(Final)
+
+#### Add 2000 to the year #### 
+
+Final$Year<-2000 + as.numeric(Final$Year)
+View(Final)
+
+#### Clean Month COlumn ####
+## https://www.rdocumentation.org/packages/lubridate/versions/1.8.0/topics/month
+
+library(lubridate)
+levels(as.factor(Final$Month))
+Final$Month<-month(as.numeric(Final$Month), label=TRUE, abbr = FALSE)
+View(Final)
+
+## Delete Assembly District extra wordings 
+library(stringr)
+library(tidyverse)
+names(Final)
+
+levels(as.factor(Final$Assembly_District))
+Final_1<-Final
+Final<-Final_1
+Final$Assembly_District<-Final$Assembly_District %>% str_replace("Assembly Dist. ", "")
+View(Final)
+levels(as.factor(Final$Assembly_District))
+
+## there are addotonal levels that I might need to get 
+## rid of 
+## "No District" "Statewide"   "Total"
+## https://www.statology.org/r-select-rows-by-condition/
+View(Final[Final$Assembly_District == 'No District'|Final$Assembly_District == 'Statewide'|Final$Assembly_District == 'Total', ])
+dim(Final[Final$Assembly_District == 'No District'|Final$Assembly_District == 'Statewide'|Final$Assembly_District == 'Total', ])
+## 12 rows 
+dim(Final)
+## 2238
+2238-12
+
+## 2226
+## there appears to also be rows that are completely empty that which 
+## I should delete empty rows first 
+dim(Final[!(Final$Assembly_District == 'No District'|Final$Assembly_District == 'Statewide'|Final$Assembly_District == 'Total'),])
+## 2234 -- why?
+Final_C<-Final
+names(Final)
+## were 3:11 are empty
+dim(Final)
+## 2238
+Final<-Final[!apply(is.na(Final[,3:11]), 1, all),]
+dim(Final)
+## 2230
+# Final_C<-Final
+dim(Final[!(Final$Assembly_District == 'No District'|Final$Assembly_District == 'Statewide'|Final$Assembly_District == 'Total'),])
+## 2226
+dim(Final[(Final$Assembly_District == 'No District'|Final$Assembly_District == 'Statewide'|Final$Assembly_District == 'Total'),])
+## 4
+2226-4
+### 2222
+View(Final[(Final$Assembly_District == 'No District'|Final$Assembly_District == 'Statewide'|Final$Assembly_District == 'Total'),])
+Final_C<-Final
+Final<-Final[!(Final$Assembly_District == 'No District'|Final$Assembly_District == 'Statewide'|Final$Assembly_District == 'Total'),]
+dim(Final)
+### 2226
+
+## I am unsure why i am not getting 2222 as expected
+levels(as.factor(Final$Assembly_District))
+
+## I mean -- the values are gone-- So I am unsure what happened
+
+## I need to replace these values by taking away their
+## 0's 
+## "01" "02" "03" "04" "05" "06" "07" "08" "09"
+# https://www.geeksforgeeks.org/how-to-replace-specific-values-in-column-in-r-dataframe/
+Final_C<-Final
+
+Final$Assembly_District[Final$Assembly_District == "01"] <- "1"
+Final$Assembly_District[Final$Assembly_District == "02"] <- "2"
+Final$Assembly_District[Final$Assembly_District == "03"] <- "3"
+Final$Assembly_District[Final$Assembly_District == "04"] <- "4"
+Final$Assembly_District[Final$Assembly_District == "05"] <- "5"
+Final$Assembly_District[Final$Assembly_District == "06"] <- "6"
+Final$Assembly_District[Final$Assembly_District == "07"] <- "7"
+Final$Assembly_District[Final$Assembly_District == "08"] <- "8"
+Final$Assembly_District[Final$Assembly_District == "09"] <- "9"
+levels(as.factor(Final$Assembly_District))
+
+View(Final)
+
+## replace NA's with the number 0
+names(Final)
+Final<-Final_C
+
 #### write a CSV ####
 
 write.csv(Final, "C:/Users/cogps/Desktop/Clean_AD_2018_22.csv", row.names=FALSE)
