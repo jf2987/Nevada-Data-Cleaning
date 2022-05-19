@@ -1308,6 +1308,37 @@ sapply(SubSet, class)
 
 #### Now I need to add rows of the 3 objects ####
 
+dim(SubSet)
+## 44
+dim(Clean_Data)
+## 2108
+
+dim(Dirty)
+## 86
+86+2108+44
+## 2238
+
+library(dplyr)
+Final<-bind_rows(Clean_Data,Dirty, SubSet) 
+dim(Final)
+## 2238
+
+## Rename the District into Assembly_District
+names(Final)
+names(Final)[names(Final)=="District"] <- "Assembly_District"
+names(Final)
+
+#### write a CSV ####
+
+write.csv(Final, "C:/Users/cogps/Desktop/Clean_AD_2018_22.csv", row.names=FALSE)
+
+#### Fin ####
+
+
+
+
+
+
 ## count of rows not in dirty
 ## 2342
 dim(dplyr::filter(Clean_Data,is.na(Democrat)))
