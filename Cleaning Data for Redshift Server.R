@@ -1430,11 +1430,12 @@ View(Final)
 ## replace NA's with the number 0
 names(Final)
 Final<-Final_C
-
+# https://www.geeksforgeeks.org/replace-na-values-with-zeros-in-r-dataframe/
+Final[is.na(Final)] = 0
 #### write a CSV ####
 
-write.csv(Final, "C:/Users/cogps/Desktop/Clean_AD_2018_22.csv", row.names=FALSE)
-
+write.csv(Final, "C:/Users/cogps/Desktop/No_NA_Clean_AD_2018_22.csv", row.names=FALSE)
+View(Final)
 #### Fin ####
 
 
