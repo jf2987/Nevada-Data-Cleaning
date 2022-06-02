@@ -1,0 +1,130 @@
+---
+title: "Nevada Project 2022"
+author: "Jasmin Fernandez Castillo (NAME PRONUNCIATION: Hazz-Mean, PRONOUNS: They/Them/Theirs"
+date: "`r Sys.Date()`"
+output: slidy_presentation
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Project Description
+
+- Frequencies of Voter Registration
+- Data from 2018 to Current
+- Per Party
+- Per Assembly District
+
+## Snippet of the Data
+
+```{r }
+library(knitr)
+getwd()
+CD<-read.csv("No_NA_Clean_AD_2018_22.csv")
+kable(CD[1:10,], caption = 'Nevada Data')
+
+```
+
+## Data Source
+
+- [Nevada WebSite](https://www.nvsos.gov/sos/elections/voters/voter-registration-statistics)
+
+- [Code Location](https://github.com/jf2987/Nevada-Data-Cleaning)
+
+
+## Democrats in the year of 2020
+
+```{r}
+CD_2020<-subset(CD, Year== 2020)
+# https://www.youtube.com/watch?v=HPJn1CMvtmI
+
+library(ggplot2)
+
+ggplot(data=CD_2020, mapping=(aes(Month, Democrat)))+ geom_boxplot()+ scale_x_discrete(limits = c("January","February","March", "April", "May", "June", "July", "August", "September","October","November", "December"))
+
+```
+
+## Box Plot of Non.Partisans in the year of 2020
+```{r}
+# https://stackoverflow.com/questions/16588022/how-can-i-reorder-the-x-axis-in-a-plot-in-r
+library(ggplot2)
+
+ggplot(data=CD_2020, mapping=(aes(Month, Non.Partisan)))+ geom_boxplot()+ scale_x_discrete(limits = c("January","February","March", "April", "May", "June", "July", "August", "September","October","November", "December"))
+
+```
+
+## Box Plot per Assembly District year 2020
+
+```{r}
+library(ggplot2)
+library(shiny)
+# https://www.youtube.com/watch?v=HPJn1CMvtmI
+ggplot(data=CD_2020, mapping=(aes(Assembly_District, Non.Partisan, colour=Month)))+ geom_point() + scale_x_discrete(limits = factor(c(1:42))) +scale_color_discrete(limits = c("January","February","March", "April", "May", "June", "July", "August", "September","October","November", "December"))
+
+```
+
+## Shiny Trial 
+
+```{r}
+library(ggplot2)
+library(shiny)
+library(dplyr)
+# https://www.youtube.com/watch?v=HPJn1CMvtmI
+server<-function(input, output, session){
+
+data<-reactive({
+  req(input$Month)
+  df<-CD_2020 %>%filter(Month %in% input$Month)
+})
+
+output$plot <- renderPlot({
+ggplot(data(), mapping=(aes(Assembly_District, Non.Partisan, colour=Month)))+ geom_point() + scale_x_discrete(limits = factor(c(1:42))) +scale_color_discrete(limits = c("January","February","March", "April", "May", "June", "July", "August", "September","October","November", "December"))
+})
+
+}
+ui <-basicPage(
+  h1("test"),
+  selectInput(inputId = "Month", label = "Month", 
+              list("January","February","March", "April", "May", "June", "July", "August", "September","October","November", "December")),
+  plotOutput("plot")
+)
+
+shinyApp(ui=ui, server = server)
+
+```
+
+
+## Trials and Tribulations
+
+- The data format varied Year to Year
+- All data for 2018 downwards is in PDF Form
+- There is a discrepancy between the Month and Year Noted for the Excel File and Hyper linked in the Webcite
+
+```{r}
+
+Discrepancy<-read.csv("Data_Check.csv")
+## delete empty columns
+library(purrr)
+Discrepancy<-Discrepancy %>% discard(~all(is.na(.) | . ==""))
+
+kable(Discrepancy[1:10,c(1,3)], caption = 'Discrepancies')
+
+```
+
+
+
+## Solutions
+- Create a R script to Facilitate the Cleaning Process
+- Convert PDF's into Excel Files VIA the Tabulizer Package
+
+## Warning
+- The Tabulizer Package Crashes the Latest Version of R Studio
+- Tabulizer Package can, however, Be used with R without an IDE
+
+
+## Results
+- Data can be Used to explore Longitudinal Trends Pre and Post the Jan. 2020 Automatic Voter Registration in Nevada
+- Data can be used to target Districts with the Most amounts of registered Democrats and Non-Partisans
+- Data can also be used to note the change in Party for Voters
