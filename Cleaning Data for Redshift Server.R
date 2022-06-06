@@ -1713,21 +1713,167 @@ View(Final)
 write.csv(Final, "C:/Users/cogps/Desktop/AD_2018_22.csv", row.names=FALSE)
 
 
-## https://boostedml.com/2020/05/visualizing-time-series-in-r.html
 
 View(Final)
 
 Final<-read.csv("C:/Users/cogps/Desktop/AD_2018_22.csv")
 
-## Start visualizations of Voter registration after the 2020 time period 
-
-library(ggfortify)
-library(zoo)
-library(tseries)
-library(astsa)
-library(forecast)
-library(ggplot2)
-
 
 ## https://www.statology.org/rename-file-in-r/
 ## figure out how to rename files based on their hyperlink
+
+## read data file 
+getwd()
+CD<-read.csv("No_NA_Clean_AD_2018_22.csv")
+
+
+## Start visualizations of Voter registration after the 2020 time period 
+## https://boostedml.com/2020/05/visualizing-time-series-in-r.html
+
+## I need to subset with a pipe soon 
+
+View(CD)
+
+
+## subset to year 2020 only 
+## https://www.datasciencemadesimple.com/delete-or-drop-rows-in-r-with-conditions-2/
+CD_2020<-subset(CD, Year== 2020)
+View(CD_2020)
+
+## Plot Party per assembly district
+?plot
+plot(as.factor(CD_2020$Assembly_District), CD_2020$Democrat)
+
+plot(as.factor(CD_2020$Assembly_District), CD_2020$Non.Partisan)
+
+## Plot Party per Month
+
+plot(as.factor(CD_2020$Month), CD_2020$Democrat)
+
+plot(as.factor(CD_2020$Month), CD_2020$Non.Partisan)
+
+
+## Test Trial to Reduce Naming Convention Shit Show
+
+DC<-read.csv("Data_Check.csv")
+
+View(DC)
+table(DC$CSV_Name)
+
+## Active Voters by ASSEMBLY DISTRICT
+## this will be November 2018 as well as May 2022
+levels(as.factor(DC$Hyperlink_Name))
+table(as.factor(DC$Hyperlink_Name))
+
+levels(as.factor(DC$CSV_Name))
+table(as.factor(DC$CSV_Name))
+
+
+## Change the CSV Name of May in the Read Object 
+levels(as.factor(DC$Hyperlink_Name))
+DC$CSV_Name <- ifelse(DC$Hyperlink_Name =="1-May", "5.22", DC$CSV_Name)
+levels(as.factor(DC$CSV_Name))
+
+DC$CSV_Name <- ifelse(DC$CSV_Name =="Active Voters Voter Registration by ASSEMBLY DISTRICT
+", "11.18", DC$CSV_Name)
+
+
+levels(as.factor(DC$CSV_Name))
+
+
+## Now I need to merge based on a Key
+data_path <- "C:/Users/cogps/Downloads/ReDo"
+
+
+files <- dir(data_path, pattern = "*.xlsx")
+View(files)
+## i need to make sure it also picks up CSV's
+library(purrr)
+library(readxl)
+library(dplyr)
+library(tidyr)
+
+weights_data <- data.frame(filename = files) %>%
+  mutate(file_contents = map(filename,
+                             ~ read_excel(file.path
+                                          (data_path,  .))))
+
+Un_Nested<-unnest(weights_data)
+View(Un_Nested)
+levels(as.factor(Un_Nested$filename))
+## the name of the files in that folder are repeating rows in the Un_Nested file 
+## it did not pick up the CSV
+names(Un_Nested)
+names(DC)
+
+library(dplyr)
+
+## left join
+result<-full_join(Un_Nested, DC, by = c("filename" = "CSV_Name"))
+?left_join
+
+View(result)
+
+levels(as.factor(result$Hyperlink_Name))
+
+
+## 18-Apr
+View(subset(result, Hyperlink_Name == "18-Apr"))
+
+
+## If Hyperlink_Name is empty, then filename, else Hyperlink Name
+c_result<-result
+result$Hyperlink_Name <- ifelse(is.na(result$Hyperlink_Name), result$filename, result$Hyperlink_Name)
+
+View(result)
+View(subset(result, Hyperlink_Name == "18-Apr"))
+
+
+## 
+C_Un_Nested<- Un_Nested
+Un_Nested<-C_Un_Nested
+
+Un_Nested$New <- ifelse(Un_Nested$filename == DC$CSV_Name, DC$Hyperlink_Name, NA)
+
+View(Un_Nested$New)
+
+## Lets try using the rowwise()
+## https://stackoverflow.com/questions/55234005/longer-object-length-is-not-a-multiple-of-shorter-object-length
+
+
+Un_Nested %>%
+  rowwise() %>% 
+  Un_Nested$New <- ifelse(Un_Nested$filename == DC$CSV_Name, DC$Hyperlink_Name, NA)%>%
+  ungroup()
+
+## did not work 
+
+## Error in UseMethod("ungroup") : 
+# no applicable method for 'ungroup' applied to an object of class "logical"
+# In addition: Warning message:
+#   In Un_Nested$filename == DC$CSV_Name :
+#   longer object length is not a multiple of shorter object length
+
+## First make sure that 
+## there are no duplicates in the new folder
+
+data_path <- "C:/Users/cogps/Downloads/ReDo_C"
+
+
+files <- dir(data_path, pattern = "*.xlsx")
+View(files)
+## i need to make sure it also picks up CSV's
+library(purrr)
+library(readxl)
+library(dplyr)
+library(tidyr)
+
+weights_data <- data.frame(filename = files) %>%
+  mutate(file_contents = map(filename,
+                             ~ read_excel(file.path
+                                          (data_path,  .))))
+
+Un_Nested<-unnest(weights_data)
+View(Un_Nested)
+levels(as.factor(Un_Nested$filename))
+
